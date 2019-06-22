@@ -1,7 +1,12 @@
 <?php
 
-namespace MockingMagician\Mathoraptor\Number;
+/**
+ * @author Marc MOREAU <moreau.marc.web@gmail.com>
+ * @license https://github.com/MockingMagician/mathoraptor/blob/master/LICENSE.md Apache License 2.0
+ * @link https://github.com/MockingMagician/mathoraptor/blob/master/README.md
+ */
 
+namespace MockingMagician\Mathoraptor\Number;
 
 use MockingMagician\Mathoraptor\Exceptions\ParseNumberException;
 use MockingMagician\Mathoraptor\Helpers\Constants;
@@ -18,6 +23,19 @@ class BigNumber
     private $exponentPart;
     /** @var string */
     private $exponentSign;
+
+    /**
+     * BigNumber constructor.
+     *
+     * @param string $number
+     *
+     * @throws ParseNumberException
+     */
+    private function __construct(string $number)
+    {
+        $this->parseNumber(trim($number));
+    }
+
     /** @var string */
 
     /**
@@ -26,9 +44,9 @@ class BigNumber
     public function __debugInfo()
     {
         return [
-            'sign'         => $this->sign,
-            'integerPart'  => $this->integerPart,
-            'decimalPart'  => $this->decimalPart,
+            'sign' => $this->sign,
+            'integerPart' => $this->integerPart,
+            'decimalPart' => $this->decimalPart,
             'exponentSign' => $this->exponentSign,
             'exponentPart' => $this->exponentPart,
         ];
@@ -45,22 +63,25 @@ class BigNumber
     }
 
     /**
-     * BigNumber constructor.
-     * @param string $number
+     * @param string $string
+     *
      * @throws ParseNumberException
+     *
+     * @return BigNumber
      */
-    private function __construct(string $number)
+    public static function fromString(string $string): self
     {
-        $this->parseNumber(\trim($number));
+        return new self($string);
     }
 
     /**
      * @param string $number
+     *
      * @throws ParseNumberException
      */
     private function parseNumber(string $number): void
     {
-        if (!(1 === \preg_match(Constants::NUMBER_PATTERN, $number,$matches))) {
+        if (!(1 === preg_match(Constants::NUMBER_PATTERN, $number, $matches))) {
             throw new ParseNumberException($number);
         }
 
@@ -94,17 +115,6 @@ class BigNumber
         }
 
         if ('+' === $this->exponentSign) {
-
         }
-    }
-
-    /**
-     * @param string $string
-     * @return BigNumber
-     * @throws ParseNumberException
-     */
-    public static function fromString(string $string): self
-    {
-        return new self($string);
     }
 }
