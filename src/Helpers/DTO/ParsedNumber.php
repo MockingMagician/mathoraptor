@@ -2,8 +2,13 @@
 
 declare(strict_types=1);
 
-namespace MockingMagician\Mathoraptor\Helpers\DTO;
+/**
+ * @author Marc MOREAU <moreau.marc.web@gmail.com>
+ * @license https://github.com/MockingMagician/mathoraptor/blob/master/LICENSE.md Apache License 2.0
+ * @link https://github.com/MockingMagician/mathoraptor/blob/master/README.md
+ */
 
+namespace MockingMagician\Mathoraptor\Helpers\DTO;
 
 use MockingMagician\Mathoraptor\Exceptions\ArgumentNotMatchPatternException;
 use MockingMagician\Mathoraptor\Helpers\Constants;
@@ -17,15 +22,17 @@ class ParsedNumber
     private $exponent;
 
     /** @var null|string */
-    private $literal = null;
+    private $literal;
 
     /**
      * ParsedNumber constructor.
+     *
      * @param string $sign
      * @param string $integerPart
      * @param string $decimalPart
      * @param string $exponentSign
-     * @param int $exponent
+     * @param int    $exponent
+     *
      * @throws ArgumentNotMatchPatternException
      */
     public function __construct(
@@ -35,22 +42,22 @@ class ParsedNumber
         string $exponentSign,
         int $exponent
     ) {
-        if (!preg_match(Constants::SIGN_PATTERN, $sign)) {
+        if (!\preg_match(Constants::SIGN_PATTERN, $sign)) {
             throw new ArgumentNotMatchPatternException($sign, Constants::SIGN_PATTERN);
         }
         $this->sign = $sign;
 
-        if (!preg_match(Constants::ONE_OR_MORE_DIGIT_PATTERN, $integerPart)) {
+        if (!\preg_match(Constants::ONE_OR_MORE_DIGIT_PATTERN, $integerPart)) {
             throw new ArgumentNotMatchPatternException($integerPart, Constants::ONE_OR_MORE_DIGIT_PATTERN);
         }
         $this->integerPart = $integerPart;
 
-        if (!preg_match(Constants::ONE_OR_MORE_DIGIT_PATTERN, $decimalPart)) {
+        if (!\preg_match(Constants::ONE_OR_MORE_DIGIT_PATTERN, $decimalPart)) {
             throw new ArgumentNotMatchPatternException($decimalPart, Constants::ONE_OR_MORE_DIGIT_PATTERN);
         }
         $this->decimalPart = $decimalPart;
 
-        if (!preg_match(Constants::SIGN_PATTERN, $exponentSign)) {
+        if (!\preg_match(Constants::SIGN_PATTERN, $exponentSign)) {
             throw new ArgumentNotMatchPatternException($exponentSign, Constants::SIGN_PATTERN);
         }
         $this->exponentSign = $exponentSign;
@@ -85,7 +92,7 @@ class ParsedNumber
 
     public function getLiteral(): string
     {
-        if (\is_null($this->literal)) {
+        if (null === $this->literal) {
             $this->literal = $this->generateLiteral();
         }
 
@@ -93,7 +100,7 @@ class ParsedNumber
     }
 
     /**
-     * @return int[]
+     * @return string[]
      */
     private function getCleanIntegerAndDecimalFromExponent(): array
     {
@@ -115,7 +122,7 @@ class ParsedNumber
             }
 
             if (0 > $diff = $this->exponent - $decimalLength) {
-                $integerPart .= \mb_substr($this->decimalPart, 0, $decimalLength + $diff);
+                $integerPart .= \mb_substr($this->decimalPart, 0, (int) ($decimalLength + $diff));
                 $decimalPart = \mb_substr($this->decimalPart, $diff);
 
                 return [$integerPart, $decimalPart];
@@ -133,21 +140,21 @@ class ParsedNumber
             $diff = $this->exponent - $integerLength;
 
             if (0 < $diff) {
-                $decimalPart = $this->integerPart . $decimalPart;
-                $decimalPart = \str_pad('', $diff, '0') . $decimalPart;
+                $decimalPart = $this->integerPart.$decimalPart;
+                $decimalPart = \str_pad('', $diff, '0').$decimalPart;
                 $integerPart = '0';
 
                 return [$integerPart, $decimalPart];
             }
 
             if (0 > $diff) {
-                $decimalPart = \mb_substr($this->integerPart, abs($diff)) . $decimalPart;
-                $integerPart = \mb_substr($this->integerPart, 0, abs($diff));
+                $decimalPart = \mb_substr($this->integerPart, \abs($diff)).$decimalPart;
+                $integerPart = \mb_substr($this->integerPart, 0, \abs($diff));
 
                 return [$integerPart, $decimalPart];
             }
 
-            $decimalPart = $this->integerPart . $decimalPart;
+            $decimalPart = $this->integerPart.$decimalPart;
             $integerPart = '0';
 
             return [$integerPart, $decimalPart];
@@ -158,8 +165,8 @@ class ParsedNumber
     {
         $cleaned = $this->getCleanIntegerAndDecimalFromExponent();
         $literal = '-' === $this->sign ? '-' : '';
-        $literal .= ('' === ($integer = ltrim($cleaned[0], '0'))) ? '0' : $integer;
-        $literal .= rtrim('.' . $cleaned[1], ".0");
+        $literal .= ('' === ($integer = \ltrim($cleaned[0], '0'))) ? '0' : $integer;
+        $literal .= \rtrim('.'.$cleaned[1], '.0');
 
         return $literal;
     }

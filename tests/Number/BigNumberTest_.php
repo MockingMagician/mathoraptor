@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @internal
  */
-final class BigNumberTest extends TestCase
+final class BigNumberTest_ extends TestCase
 {
     /**
      * @throws ParseNumberException

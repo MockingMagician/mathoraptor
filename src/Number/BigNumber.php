@@ -33,7 +33,7 @@ class BigNumber
      */
     private function __construct(string $number)
     {
-        $this->parseNumber(trim($number));
+        $this->parseNumber(\trim($number));
     }
 
     /** @var string */
@@ -57,7 +57,7 @@ class BigNumber
      */
     public function __toString()
     {
-        $string = json_encode($this->__debugInfo());
+        $string = \json_encode($this->__debugInfo());
 
         return $string ? $string : '';
     }
@@ -81,7 +81,7 @@ class BigNumber
      */
     private function parseNumber(string $number): void
     {
-        if (!(1 === preg_match(Constants::NUMBER_PATTERN, $number, $matches))) {
+        if (!(1 === \preg_match(Constants::NUMBER_PATTERN, $number, $matches))) {
             throw new ParseNumberException($number);
         }
 

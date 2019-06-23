@@ -2,8 +2,13 @@
 
 declare(strict_types=1);
 
-namespace MockingMagician\Mathoraptor\Helpers;
+/**
+ * @author Marc MOREAU <moreau.marc.web@gmail.com>
+ * @license https://github.com/MockingMagician/mathoraptor/blob/master/LICENSE.md Apache License 2.0
+ * @link https://github.com/MockingMagician/mathoraptor/blob/master/README.md
+ */
 
+namespace MockingMagician\Mathoraptor\Helpers;
 
 use MockingMagician\Mathoraptor\Exceptions\ArgumentNotMatchPatternException;
 use MockingMagician\Mathoraptor\Exceptions\ParseNumberException;
@@ -22,13 +27,13 @@ final class Parser
      */
     private function __construct(string $number)
     {
-        if (!preg_match(Constants::PARSE_NUMBER_PATTERN, $number, $matches)) {
+        if (!\preg_match(Constants::PARSE_NUMBER_PATTERN, $number, $matches)) {
             throw new ParseNumberException($number);
         }
 
         $default = [$sign = '+', $integer = '0', $decimal = '0', $exponentSign = '+', $exponent = 0];
 
-        for ($i = 0; $i < 5; $i++) {
+        for ($i = 0; $i < 5; ++$i) {
             if (isset($matches[$i])) {
                 if ('' !== $matches[$i]) {
                     $default[$i] = $matches[$i];
@@ -44,9 +49,11 @@ final class Parser
 
     /**
      * @param string $integerOrFloatLike
-     * @return string
+     *
      * @throws ArgumentNotMatchPatternException
      * @throws ParseNumberException
+     *
+     * @return string
      */
     public static function parseNumber(string $integerOrFloatLike): string
     {

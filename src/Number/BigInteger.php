@@ -26,7 +26,7 @@ class BigInteger implements BasicOperationsInterface
      */
     private function __construct(string $integer)
     {
-        $this->parseNumber(trim($integer));
+        $this->parseNumber(\trim($integer));
     }
 
     /**
@@ -45,7 +45,7 @@ class BigInteger implements BasicOperationsInterface
      */
     public function __toString()
     {
-        $string = json_encode($this->__debugInfo());
+        $string = \json_encode($this->__debugInfo());
 
         return $string ? $string : '';
     }
@@ -76,9 +76,9 @@ class BigInteger implements BasicOperationsInterface
         }
 
         $result = '';
-        $self = str_split($this->integerPart);
+        $self = \str_split($this->integerPart);
         $iSelf = \count($self);
-        $that = str_split($interface->integerPart);
+        $that = \str_split($interface->integerPart);
         $iThat = \count($that);
         for ($iSelf--, $iThat--; $iSelf >= 0 && $iThat >= 0; $iSelf--, $iThat--) {
         }
@@ -125,7 +125,7 @@ class BigInteger implements BasicOperationsInterface
      */
     private function parseNumber(string $integer)
     {
-        if (!(1 === preg_match(Constants::INTEGER_PATTERN, $integer, $matches))) {
+        if (!(1 === \preg_match(Constants::INTEGER_PATTERN, $integer, $matches))) {
             throw new ParseIntegerException($integer);
         }
 
