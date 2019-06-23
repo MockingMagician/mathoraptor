@@ -10,9 +10,9 @@ namespace MockingMagician\Mathoraptor\Helpers;
 
 final class Constants
 {
-    public const PARSE_NUMBER_PATTERN = '^(?:[^\d+-]*)([+-]?)([\d]+)((?:\.[\d]+)?)((?:e[+-]?[\d]+)?)(?:[^\d+-]*)$';
-    public const SIGN_PATTERN = '^[+-]$';
-    public const ONE_OR_MORE_DIGIT_PATTERN = '^\d+$';
+    public const PARSE_NUMBER_PATTERN = '#^(?:[^\d+-]*)([+-]?)([\d]+)((?:\.[\d]+)?)((?:e[+-]?[\d]+)?)(?:[^\d+-]*)$#';
+    public const SIGN_PATTERN = '#^[+-]$#';
+    public const ONE_OR_MORE_DIGIT_PATTERN = '#^\d+$#';
 
     public const INTEGER_PATTERN = '/^([+-]?)(\d+)$/i';
     public const NUMBER_PATTERN = '/^([+-]?)(\d+)(?:\.(\d+))?(?:e([+-]?)(\d+))?$/i';

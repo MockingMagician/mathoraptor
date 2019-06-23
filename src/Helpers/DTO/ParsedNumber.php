@@ -16,6 +16,9 @@ class ParsedNumber
     private $exponentSign;
     private $exponent;
 
+    /** @var null|string */
+    private $literal = null;
+
     /**
      * ParsedNumber constructor.
      * @param string $sign
@@ -82,6 +85,82 @@ class ParsedNumber
 
     public function getLiteral(): string
     {
-        return '';
+        if (\is_null($this->literal)) {
+            $this->literal = $this->generateLiteral();
+        }
+
+        return $this->literal;
+    }
+
+    /**
+     * @return int[]
+     */
+    private function getCleanIntegerAndDecimalFromExponent(): array
+    {
+        if (0 === $this->exponent) {
+            return [$this->integerPart, $this->decimalPart];
+        }
+
+        if ('+' === $this->exponentSign) {
+            $integerPart = $this->integerPart;
+            $decimalLength = \mb_strlen($this->decimalPart);
+            $diff = $this->exponent - $decimalLength;
+
+            if (0 < $diff) {
+                $integerPart .= $this->decimalPart;
+                $integerPart .= \str_pad('', $diff, '0');
+                $decimalPart = '0';
+
+                return [$integerPart, $decimalPart];
+            }
+
+            if (0 > $diff = $this->exponent - $decimalLength) {
+                $integerPart .= \mb_substr($this->decimalPart, 0, $decimalLength + $diff);
+                $decimalPart = \mb_substr($this->decimalPart, $diff);
+
+                return [$integerPart, $decimalPart];
+            }
+
+            $integerPart .= $this->decimalPart;
+            $decimalPart = '0';
+
+            return [$integerPart, $decimalPart];
+        }
+
+        if ('-' === $this->exponentSign) {
+            $decimalPart = $this->decimalPart;
+            $integerLength = \mb_strlen($this->integerPart);
+            $diff = $this->exponent - $integerLength;
+
+            if (0 < $diff) {
+                $decimalPart = $this->integerPart . $decimalPart;
+                $decimalPart = \str_pad('', $diff, '0') . $decimalPart;
+                $integerPart = '0';
+
+                return [$integerPart, $decimalPart];
+            }
+
+            if (0 > $diff) {
+                $decimalPart = \mb_substr($this->integerPart, abs($diff)) . $decimalPart;
+                $integerPart = \mb_substr($this->integerPart, 0, abs($diff));
+
+                return [$integerPart, $decimalPart];
+            }
+
+            $decimalPart = $this->integerPart . $decimalPart;
+            $integerPart = '0';
+
+            return [$integerPart, $decimalPart];
+        }
+    }
+
+    private function generateLiteral(): string
+    {
+        $cleaned = $this->getCleanIntegerAndDecimalFromExponent();
+        $literal = '-' === $this->sign ? '-' : '';
+        $literal .= ('' === ($integer = ltrim($cleaned[0], '0'))) ? '0' : $integer;
+        $literal .= rtrim('.' . $cleaned[1], ".0");
+
+        return $literal;
     }
 }
