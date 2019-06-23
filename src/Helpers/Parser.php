@@ -6,19 +6,12 @@ namespace MockingMagician\Mathoraptor\Helpers;
 
 
 use MockingMagician\Mathoraptor\Exceptions\ParseNumberException;
+use MockingMagician\Mathoraptor\Helpers\DTO\ParsedNumber;
 
 final class Parser
 {
-    /** @var string */
-    private $sign;
-    /** @var string */
-    private $integerPart;
-    /** @var string */
-    private $decimalPart;
-    /** @var string */
-    private $exponentSign;
-    /** @var int */
-    private $exponentPart;
+    /** @var ParsedNumber */
+    public $parsedNumber;
 
     /**
      * @param string $number
@@ -27,43 +20,24 @@ final class Parser
      */
     private function __construct(string $number)
     {
-        $number = \preg_replace(
-            Constants::TRIM_LEFT_NUMBER_PATTERN,
-            Constants::TRIM_LEFT_NUMBER_REPLACEMENT,
-            $number
-        );
-        $number = \preg_replace(
-            Constants::TRIM_RIGHT_NUMBER_PATTERN,
-            Constants::TRIM_RIGHT_NUMBER_REPLACEMENT,
-            $number
-        );
-
-        // check number pattern
-        if (!preg_match(Constants::NUMBER_PATTERN, $number, $matches)) {
+        if (!preg_match(Constants::PARSE_NUMBER_PATTERN, $number, $matches)) {
             throw new ParseNumberException($number);
         }
 
-        $this->sign = '+';
-        if (isset($matches[1]) && '-' === $matches[1]) {
-            $this->sign = '-';
+        $default = [$sign = '+', $integer = '0', $decimal = '0', $exponentSign = '+', $exponent = 0];
+
+        for ($i = 0; $i < 5; $i++) {
+            if (isset($matches[$i])) {
+                if ('' !== $matches[$i]) {
+                    $default[$i] = $matches[$i];
+                    if (4 === $i) {
+                        $default[$i] = (int) $default[$i];
+                    }
+                }
+            }
         }
 
-        $this->integerPart = $matches[2];
-
-        $this->decimalPart = '';
-        if (isset($matches[3]) && '' !== $matches[3]) {
-            $this->decimalPart = $matches[3];
-        }
-
-        $this->exponentSign = '+';
-        if (isset($matches[4]) && '-' !== $matches[4]) {
-            $this->exponentPart = $matches[4];
-        }
-
-        $this->exponentPart = 0;
-        if (isset($matches[5]) && '' !== $matches[5]) {
-            $this->exponentPart = (int) $matches[5];
-        }
+        $this->parsedNumber = new ParsedNumber(...$default);
     }
 
     private function cleanExponent()
@@ -73,50 +47,29 @@ final class Parser
         }
 
         if ('+' === $this->exponentSign) {
-            while (0 < $this->exponentSign-- && 0 < mb_strlen($this->decimalPart)) {
+            while (0 < $this->exponentPart-- && 0 < mb_strlen($this->decimalPart)) {
                 $this->integerPart .= $this->decimalPart[0];
                 $this->decimalPart = \mb_substr($this->decimalPart, 1);
             }
-            while (0 < $this->exponentSign--) {
+            while (0 < $this->exponentPart--) {
                 $this->integerPart .= '0';
             }
-            $this->exponentPart = 0;
 
-//            $decimalLength = mb_strlen($this->decimalPart);
-//            if ($decimalLength == $this->exponentPart) {
-//                $this->integerPart .= $decimalLength;
-//                $this->exponentPart = 0;
-//
-//                return;
-//            }
-//
-//            if (0 < ($diff = $this->exponentPart - $decimalLength)) {
-//                $this->integerPart .= $decimalLength;
-//                $this->integerPart = str_pad($this->integerPart, $diff, '0');
-//                $this->exponentPart = 0;
-//
-//                return;
-//            }
-//
-//            if (0 > ($diff = $this->exponentPart - $decimalLength)) {
-//                $this->integerPart .= mb_substr($this->decimalPart, 0, $this->exponentPart);
-//                $this->decimalPart = mb_substr($this->decimalPart, $this->exponentPart);
-//                $this->exponentPart = 0;
-//
-//                return;
-//            }
+            return;
         }
 
-        if ('-' === $this->exponentSign) {
-            while (0 < $this->exponentSign-- && 0 < mb_strlen($this->decimalPart)) {
-                $this->decimalPart .= $this->integerPart[0];
-                $this->decimalPart = \mb_substr($this->decimalPart, 1);
-            }
-            while (0 < $this->exponentSign--) {
-                $this->integerPart .= '0';
-            }
-            $this->exponentPart = 0;
+        while (0 < $this->exponentPart-- && 0 < mb_strlen($this->integerPart)) {
+            $this->decimalPart = $this->integerPart[\mb_strlen($this->integerPart) - 1] . $this->decimalPart;
+            $this->integerPart = \mb_substr($this->integerPart, 0, \mb_strlen($this->integerPart) - 1);
         }
+        while (0 <= $this->exponentPart--) {
+            $this->decimalPart = '0' . $this->decimalPart;
+        }
+    }
+
+    public static function parseNumber(string $float): string
+    {
+        $self = new self($float);
     }
 
     /**
@@ -128,10 +81,28 @@ final class Parser
     {
         $self = new self($float);
         $self->cleanExponent();
+
+        return \preg_replace(
+            Constants::TRIM_LEFT_NUMBER_PATTERN,
+            Constants::TRIM_LEFT_NUMBER_REPLACEMENT,
+            ('-' === $self->sign ? '-' : '') . (0 === \mb_strlen($self->integerPart) ? 0 : $self->integerPart) . '.' . $self->decimalPart
+        );
     }
 
+    /**
+     * @param string $integer
+     * @return string
+     * @throws ParseNumberException
+     */
     public static function parseInteger(string $integer): string
     {
+        $self = new self($integer);
+        $self->cleanExponent();
 
+        return \preg_replace(
+            Constants::TRIM_LEFT_NUMBER_PATTERN,
+            Constants::TRIM_LEFT_NUMBER_REPLACEMENT,
+            ('-' === $self->sign ? '-' : '') . $self->integerPart
+        );
     }
 }

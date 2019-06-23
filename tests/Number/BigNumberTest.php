@@ -22,7 +22,7 @@ final class BigNumberTest extends TestCase
      */
     public function test pending()
     {
-        $number = BigNumber::fromString('-12.10e-14');
-        var_dump($number);
+//        $number = BigNumber::fromString('-12.10e-14');
+//        var_dump($number);
     }
 }
