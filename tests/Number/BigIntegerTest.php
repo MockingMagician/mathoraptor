@@ -6,23 +6,22 @@
  * @link https://github.com/MockingMagician/mathoraptor/blob/master/README.md
  */
 
-namespace MockingMagician\Mathoraptor\Tests\Number;
-
+use MockingMagician\Mathoraptor\Exceptions\ArgumentNotMatchPatternException;
 use MockingMagician\Mathoraptor\Exceptions\ParseNumberException;
-use MockingMagician\Mathoraptor\Number\BigNumber;
+use MockingMagician\Mathoraptor\Number\BigInteger;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
  */
-final class BigNumberTest_ extends TestCase
+final class BigIntegerTest extends TestCase
 {
     /**
+     * @throws ArgumentNotMatchPatternException
      * @throws ParseNumberException
      */
-    public function test pending()
+    public function testFromString()
     {
-//        $number = BigNumber::fromString('-12.10e-14');
-//        var_dump($number);
+        $this->assertInstanceOf(BigInteger::class, BigInteger::fromString('123456'));
     }
 }

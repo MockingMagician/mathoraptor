@@ -27,7 +27,7 @@ class BigInteger extends BigNumber
     protected function __construct(string $number)
     {
         parent::__construct($number);
-        if (\preg_match(Constants::INTEGER_PATTERN, $this->number)) {
+        if (!\preg_match(Constants::INTEGER_PATTERN, $this->number)) {
             throw new ParseIntegerException($this->number);
         }
     }

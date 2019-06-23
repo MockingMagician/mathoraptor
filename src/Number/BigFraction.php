@@ -8,7 +8,9 @@
 
 namespace MockingMagician\Mathoraptor\Number;
 
-class BigFraction
+use MockingMagician\Mathoraptor\Operation\BasicOperationsInterface;
+
+class BigFraction implements BasicOperationsInterface
 {
     private $numerator;
     private $denominator;
@@ -17,5 +19,58 @@ class BigFraction
     {
         $this->numerator = $numerator;
         $this->denominator = $denominator;
+        $this->reduce();
+    }
+
+    public function add(BasicOperationsInterface $interface): BasicOperationsInterface
+    {
+        // TODO: Implement add() method.
+    }
+
+    public function sub(BasicOperationsInterface $interface): BasicOperationsInterface
+    {
+        // TODO: Implement sub() method.
+    }
+
+    public function multiplyBy(BasicOperationsInterface $interface): BasicOperationsInterface
+    {
+        // TODO: Implement multiplyBy() method.
+    }
+
+    public function divideBy(BasicOperationsInterface $interface): BasicOperationsInterface
+    {
+        // TODO: Implement divideBy() method.
+    }
+
+    public function getNumerator(): BigInteger
+    {
+        return $this->numerator;
+    }
+
+    public function getDenominator(): BigInteger
+    {
+        return $this->denominator;
+    }
+
+    protected function reduce(): void
+    {
+        while (null !== ($divider = $this->findCommonFactor())) {
+            $this->numerator = bcdiv($this->numerator->getNumber(), $divider);
+            $this->denominator = bcdiv($this->denominator->getNumber(), $divider);
+        }
+    }
+
+    protected function findCommonFactor(): ?string
+    {
+        $list = ['7', '5', '3', '2'];
+        foreach ($list as $divider) {
+            if ('0' === bcmod($this->numerator->getNumber(), $divider) &&
+                '0' === bcmod($this->denominator->getNumber(), $divider)
+            ) {
+                return $divider;
+            }
+        }
+
+        return null;
     }
 }
