@@ -33,12 +33,12 @@ final class Parser
 
         $default = [$sign = '+', $integer = '0', $decimal = '0', $exponentSign = '+', $exponent = 0];
 
-        for ($i = 0; $i < 5; ++$i) {
+        for ($i = 1; $i <= 5; ++$i) {
             if (isset($matches[$i])) {
                 if ('' !== $matches[$i]) {
-                    $default[$i] = $matches[$i];
-                    if (4 === $i) {
-                        $default[$i] = (int) $default[$i];
+                    $default[$i - 1] = $matches[$i];
+                    if (4 === $i - 1) {
+                        $default[$i - 1] = (int) $default[$i - 1];
                     }
                 }
             }
