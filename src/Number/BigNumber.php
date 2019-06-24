@@ -95,7 +95,7 @@ class BigNumber implements BasicOperationsInterface
         if ($interface instanceof self) {
             $length = \max(\mb_strlen($this->getDecimalPart()), \mb_strlen($interface->getDecimalPart()));
 
-            return self::fromString(\bcadd($this->number, $interface->number, $length));
+            return BigNumber::fromString(\bcadd($this->number, $interface->number, $length));
         }
 
         if ($interface instanceof BigFraction) {
@@ -132,7 +132,7 @@ class BigNumber implements BasicOperationsInterface
         if ($interface instanceof self) {
             $length = \max(\mb_strlen($this->getDecimalPart()), \mb_strlen($interface->getDecimalPart()));
 
-            return self::fromString(\bcsub($this->number, $interface->number, $length));
+            return BigNumber::fromString(\bcsub($this->number, $interface->number, $length));
         }
 
         if ($interface instanceof BigFraction) {
@@ -169,7 +169,7 @@ class BigNumber implements BasicOperationsInterface
         if ($interface instanceof self) {
             $length = \mb_strlen($this->getDecimalPart()) + \mb_strlen($interface->getDecimalPart());
 
-            return self::fromString(\bcmul($this->number, $interface->number, $length));
+            return BigNumber::fromString(\bcmul($this->number, $interface->number, $length));
         }
 
         if ($interface instanceof BigFraction) {

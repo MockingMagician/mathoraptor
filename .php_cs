@@ -70,6 +70,7 @@ $config = PhpCsFixer\Config::create()
         'single_line_comment_style' => true,
         'strict_param' => true,
         'string_line_ending' => true,
+        'self_accessor' => false,
         'yoda_style' => true,
         'header_comment' => [
             'header' => implode("\n", [
