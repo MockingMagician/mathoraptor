@@ -91,18 +91,18 @@ final class BigIntegerTest extends TestCase
      */
     public function testMultiplyBy()
     {
-        $n1 = BigNumber::fromString('22.22');
+        $n1 = BigInteger::fromString('22');
         $n2 = BigNumber::fromString('33.33');
         $r1 = $n1->multiplyBy($n2);
         $this->assertInstanceOf(BigNumber::class, $r1);
         /** @var BigNumber $r1 */
-        $this->assertEquals('740.5926', $r1->getNumber());
+        $this->assertEquals('733.26', $r1->getNumber());
 
         $n3 = BigInteger::fromString('33');
         $r2 = $n1->multiplyBy($n3);
         $this->assertInstanceOf(BigNumber::class, $r2);
         /** @var BigNumber $r2 */
-        $this->assertEquals('733.26', $r2->getNumber());
+        $this->assertEquals('66', $r2->getNumber());
 
         $n4 = new BigFraction(BigInteger::fromString('3'), BigInteger::fromString('2'));
         $r3 = $n1->multiplyBy($n4);
