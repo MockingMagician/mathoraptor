@@ -68,7 +68,7 @@ class BigFraction implements BasicOperationsInterface
 
     protected function findCommonFactor(): ?string
     {
-        $list = ['7', '5', '3', '2'];
+        $list = ['11', '7', '5', '3', '2'];
         foreach ($list as $divider) {
             if ('0' === \bcmod($this->numerator->getNumber(), $divider) &&
                 '0' === \bcmod($this->denominator->getNumber(), $divider)
