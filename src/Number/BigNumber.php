@@ -99,10 +99,18 @@ class BigNumber implements BasicOperationsInterface
         }
 
         if ($interface instanceof BigFraction) {
-            $numerator = \bcmul($this->getNumber(), $interface->getDenominator()->getNumber());
-            $numerator = \bcadd($numerator, $interface->getNumerator()->getNumber());
+            $length = \mb_strlen($this->getDecimalPart());
+            $numerator = \bcmul($this->getNumber(), $interface->getDenominator()->getNumber(), $length);
+            $numerator = \bcadd($numerator, $interface->getNumerator()->getNumber(), $length);
+            $denominator = $interface->getDenominator()->getNumber();
+            $length = \mb_strlen(BigNumber::fromString($numerator)->getDecimalPart());
+            if ($length > 0) {
+                $multiply = \bcpow('10', $length);
+                $numerator = \bcmul($numerator, $multiply);
+                $denominator = \bcmul($denominator, $multiply);
+            }
 
-            return new BigFraction(BigInteger::fromString($numerator), clone $interface->getDenominator());
+            return new BigFraction(BigInteger::fromString($numerator), BigInteger::fromString($denominator));
         }
 
         throw new OperationException(
@@ -128,10 +136,18 @@ class BigNumber implements BasicOperationsInterface
         }
 
         if ($interface instanceof BigFraction) {
-            $numerator = \bcmul($this->getNumber(), $interface->getDenominator()->getNumber());
-            $numerator = \bcsub($numerator, $interface->getNumerator()->getNumber());
+            $length = \mb_strlen($this->getDecimalPart());
+            $numerator = \bcmul($this->getNumber(), $interface->getDenominator()->getNumber(), $length);
+            $numerator = \bcsub($numerator, $interface->getNumerator()->getNumber(), $length);
+            $denominator = $interface->getDenominator()->getNumber();
+            $length = \mb_strlen(BigNumber::fromString($numerator)->getDecimalPart());
+            if ($length > 0) {
+                $multiply = \bcpow('10', $length);
+                $numerator = \bcmul($numerator, $multiply);
+                $denominator = \bcmul($denominator, $multiply);
+            }
 
-            return new BigFraction(BigInteger::fromString($numerator), clone $interface->getDenominator());
+            return new BigFraction(BigInteger::fromString($numerator), BigInteger::fromString($denominator));
         }
 
         throw new OperationException(

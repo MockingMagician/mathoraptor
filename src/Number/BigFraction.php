@@ -8,6 +8,8 @@
 
 namespace MockingMagician\Mathoraptor\Number;
 
+use MockingMagician\Mathoraptor\Exceptions\ArgumentNotMatchPatternException;
+use MockingMagician\Mathoraptor\Exceptions\ParseNumberException;
 use MockingMagician\Mathoraptor\Operation\BasicOperationsInterface;
 
 class BigFraction implements BasicOperationsInterface
@@ -52,11 +54,15 @@ class BigFraction implements BasicOperationsInterface
         return $this->denominator;
     }
 
+    /**
+     * @throws ArgumentNotMatchPatternException
+     * @throws ParseNumberException
+     */
     protected function reduce(): void
     {
         while (null !== ($divider = $this->findCommonFactor())) {
-            $this->numerator = bcdiv($this->numerator->getNumber(), $divider);
-            $this->denominator = bcdiv($this->denominator->getNumber(), $divider);
+            $this->numerator = BigInteger::fromString(\bcdiv($this->numerator->getNumber(), $divider));
+            $this->denominator = BigInteger::fromString(\bcdiv($this->denominator->getNumber(), $divider));
         }
     }
 
