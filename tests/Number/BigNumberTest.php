@@ -82,7 +82,6 @@ class BigNumberTest extends TestCase
      */
     public function testMultiplyBy()
     {
-
         $n1 = BigNumber::fromString('22.22');
         $n2 = BigNumber::fromString('33.33');
         $r1 = $n1->multiplyBy($n2);
@@ -100,12 +99,37 @@ class BigNumberTest extends TestCase
         $r3 = $n1->multiplyBy($n4);
         static::assertInstanceOf(BigFraction::class, $r3);
         /** @var BigFraction $r3 */
-        static::assertEquals('6666', $r3->getNumerator()->getNumber());
-        static::assertEquals('5000', $r3->getDenominator()->getNumber());
+        static::assertEquals('3333', $r3->getNumerator()->getNumber());
+        static::assertEquals('100', $r3->getDenominator()->getNumber());
     }
 
+    /**
+     * @throws ArgumentNotMatchPatternException
+     * @throws OperationException
+     * @throws ParseNumberException
+     */
     public function testDivideBy()
     {
+        $n1 = BigNumber::fromString('22.22');
+        $n2 = BigNumber::fromString('33.33');
+        $r1 = $n1->divideBy($n2);
+        static::assertInstanceOf(BigFraction::class, $r1);
+        /** @var BigFraction $r1 */
+        static::assertEquals('2222', $r1->getNumerator()->getNumber());
+        static::assertEquals('3333', $r1->getDenominator()->getNumber());
 
+        $n3 = BigInteger::fromString('33');
+        $r2 = $n1->divideBy($n3);
+        static::assertInstanceOf(BigFraction::class, $r2);
+        /** @var BigFraction $r2 */
+        static::assertEquals('1111', $r2->getNumerator()->getNumber());
+        static::assertEquals('1650', $r2->getDenominator()->getNumber());
+
+        $n4 = new BigFraction(BigInteger::fromString('3'), BigInteger::fromString('2'));
+        $r3 = $n1->divideBy($n4);
+        static::assertInstanceOf(BigFraction::class, $r3);
+        /** @var BigFraction $r3 */
+        static::assertEquals('1111', $r3->getNumerator()->getNumber());
+        static::assertEquals('75', $r3->getDenominator()->getNumber());
     }
 }

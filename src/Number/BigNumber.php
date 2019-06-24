@@ -167,14 +167,21 @@ class BigNumber implements BasicOperationsInterface
     public function multiplyBy(BasicOperationsInterface $interface): BasicOperationsInterface
     {
         if ($interface instanceof self) {
-            $length = \max(\mb_strlen($this->getDecimalPart()), \mb_strlen($interface->getDecimalPart()));
+            $length = \mb_strlen($this->getDecimalPart()) + \mb_strlen($interface->getDecimalPart());
 
             return self::fromString(\bcmul($this->number, $interface->number, $length));
         }
 
         if ($interface instanceof BigFraction) {
-            $numerator = \bcmul($this->getNumber(), $interface->getNumerator()->getNumber());
-            $denominator = \bcmul($this->getNumber(), $interface->getDenominator()->getNumber());
+            $length = \mb_strlen($this->getDecimalPart());
+            $numerator = \bcmul($this->getNumber(), $interface->getNumerator()->getNumber(), $length);
+            $denominator = $interface->getDenominator()->getNumber();
+            $length = \mb_strlen(BigNumber::fromString($numerator)->getDecimalPart());
+            if ($length > 0) {
+                $multiply = \bcpow('10', $length);
+                $numerator = \bcmul($numerator, $multiply);
+                $denominator = \bcmul($denominator, $multiply);
+            }
 
             return new BigFraction(BigInteger::fromString($numerator), BigInteger::fromString($denominator));
         }
@@ -197,17 +204,16 @@ class BigNumber implements BasicOperationsInterface
     {
         if ($interface instanceof self) {
             $length = \max(\mb_strlen($this->getDecimalPart()), \mb_strlen($interface->getDecimalPart()));
+            $multiply = \bcpow('10', $length);
 
             return new BigFraction(
-                BigInteger::fromString(\bcmul($this->number, "${length}")),
-                BigInteger::fromString(\bcmul($interface->number, "${length}"))
+                BigInteger::fromString(\bcmul($this->number, $multiply)),
+                BigInteger::fromString(\bcmul($interface->number, $multiply))
             );
         }
 
         if ($interface instanceof BigFraction) {
-            $numerator = \bcmul($this->getNumber(), $interface->getDenominator()->getNumber());
-
-            return new BigFraction(BigInteger::fromString($numerator), clone $interface->getNumerator());
+            return $this->multiplyBy(new BigFraction($interface->getDenominator(), $interface->getNumerator()));
         }
 
         throw new OperationException(
