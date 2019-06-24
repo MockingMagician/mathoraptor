@@ -103,7 +103,7 @@ class BigNumber implements BasicOperationsInterface
             $numerator = \bcmul($this->getNumber(), $interface->getDenominator()->getNumber(), $length);
             $numerator = \bcadd($numerator, $interface->getNumerator()->getNumber(), $length);
             $denominator = $interface->getDenominator()->getNumber();
-            $length = \mb_strlen(BigNumber::fromString($numerator)->getDecimalPart());
+            $length = (string) \mb_strlen(BigNumber::fromString($numerator)->getDecimalPart());
             if ($length > 0) {
                 $multiply = \bcpow('10', $length);
                 $numerator = \bcmul($numerator, $multiply);
@@ -140,7 +140,7 @@ class BigNumber implements BasicOperationsInterface
             $numerator = \bcmul($this->getNumber(), $interface->getDenominator()->getNumber(), $length);
             $numerator = \bcsub($numerator, $interface->getNumerator()->getNumber(), $length);
             $denominator = $interface->getDenominator()->getNumber();
-            $length = \mb_strlen(BigNumber::fromString($numerator)->getDecimalPart());
+            $length = (string) \mb_strlen(BigNumber::fromString($numerator)->getDecimalPart());
             if ($length > 0) {
                 $multiply = \bcpow('10', $length);
                 $numerator = \bcmul($numerator, $multiply);
@@ -176,7 +176,7 @@ class BigNumber implements BasicOperationsInterface
             $length = \mb_strlen($this->getDecimalPart());
             $numerator = \bcmul($this->getNumber(), $interface->getNumerator()->getNumber(), $length);
             $denominator = $interface->getDenominator()->getNumber();
-            $length = \mb_strlen(BigNumber::fromString($numerator)->getDecimalPart());
+            $length = (string) \mb_strlen(BigNumber::fromString($numerator)->getDecimalPart());
             if ($length > 0) {
                 $multiply = \bcpow('10', $length);
                 $numerator = \bcmul($numerator, $multiply);
@@ -203,7 +203,7 @@ class BigNumber implements BasicOperationsInterface
     public function divideBy(BasicOperationsInterface $interface): BasicOperationsInterface
     {
         if ($interface instanceof self) {
-            $length = \max(\mb_strlen($this->getDecimalPart()), \mb_strlen($interface->getDecimalPart()));
+            $length = (string) \max(\mb_strlen($this->getDecimalPart()), \mb_strlen($interface->getDecimalPart()));
             $multiply = \bcpow('10', $length);
 
             return new BigFraction(

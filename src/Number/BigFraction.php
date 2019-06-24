@@ -70,8 +70,8 @@ class BigFraction implements BasicOperationsInterface
     {
         $list = ['7', '5', '3', '2'];
         foreach ($list as $divider) {
-            if ('0' === bcmod($this->numerator->getNumber(), $divider) &&
-                '0' === bcmod($this->denominator->getNumber(), $divider)
+            if ('0' === \bcmod($this->numerator->getNumber(), $divider) &&
+                '0' === \bcmod($this->denominator->getNumber(), $divider)
             ) {
                 return $divider;
             }
