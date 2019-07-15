@@ -9,6 +9,7 @@
 namespace MockingMagician\Mathoraptor\Number;
 
 use MockingMagician\Mathoraptor\Exceptions\ArgumentNotMatchPatternException;
+use MockingMagician\Mathoraptor\Exceptions\OperationException;
 use MockingMagician\Mathoraptor\Exceptions\ParseNumberException;
 use MockingMagician\Mathoraptor\Operation\BasicOperationsInterface;
 
@@ -17,6 +18,13 @@ class BigFraction implements BasicOperationsInterface
     private $numerator;
     private $denominator;
 
+    /**
+     * BigFraction constructor.
+     * @param BigInteger $numerator
+     * @param BigInteger $denominator
+     * @throws ArgumentNotMatchPatternException
+     * @throws ParseNumberException
+     */
     public function __construct(BigInteger $numerator, BigInteger $denominator)
     {
         $this->numerator = $numerator;
@@ -24,24 +32,107 @@ class BigFraction implements BasicOperationsInterface
         $this->reduce();
     }
 
+    /**
+     * @param BasicOperationsInterface $interface
+     *
+     * @throws ArgumentNotMatchPatternException
+     * @throws OperationException
+     * @throws ParseNumberException
+     *
+     * @return BasicOperationsInterface
+     */
     public function add(BasicOperationsInterface $interface): BasicOperationsInterface
     {
-        // TODO: Implement add() method.
+        if ($interface instanceof self) {
+            $n1 = \bcmul($this->numerator->getNumber(), $interface->denominator->getNumber());
+            $n2 = \bcmul($interface->numerator->getNumber(), $this->numerator->getNumber());
+            $numerator = \bcadd($n1, $n2);
+            $denominator = \bcmul($this->denominator->getNumber(), $interface->denominator->getNumber());
+
+            return new BigFraction(BigInteger::fromString($numerator), BigInteger::fromString($denominator));
+        }
+
+        if ($interface instanceof BigNumber) {
+            return $interface->add($this);
+        }
+
+        throw new OperationException(
+            \sprintf('Operation not implemented with object `%s`', \get_class($interface))
+        );
     }
 
+    /**
+     * @param BasicOperationsInterface $interface
+     *
+     * @throws ArgumentNotMatchPatternException
+     * @throws OperationException
+     * @throws ParseNumberException
+     *
+     * @return BasicOperationsInterface
+     */
     public function sub(BasicOperationsInterface $interface): BasicOperationsInterface
     {
-        // TODO: Implement sub() method.
+        if ($interface instanceof self) {
+            $n1 = \bcmul($this->numerator->getNumber(), $interface->denominator->getNumber());
+            $n2 = \bcmul($interface->numerator->getNumber(), $this->numerator->getNumber());
+            $numerator = \bcsub($n1, $n2);
+            $denominator = \bcmul($this->denominator->getNumber(), $interface->denominator->getNumber());
+
+            return new BigFraction(BigInteger::fromString($numerator), BigInteger::fromString($denominator));
+        }
+
+        if ($interface instanceof BigNumber) {
+            return BigInteger::fromString('0')->sub($interface)->add($this);
+        }
+
+        throw new OperationException(
+            \sprintf('Operation not implemented with object `%s`', \get_class($interface))
+        );
     }
 
+    /**
+     * @param BasicOperationsInterface $interface
+     *
+     * @throws ArgumentNotMatchPatternException
+     * @throws OperationException
+     * @throws ParseNumberException
+     *
+     * @return BasicOperationsInterface
+     */
     public function multiplyBy(BasicOperationsInterface $interface): BasicOperationsInterface
     {
-        // TODO: Implement multiplyBy() method.
+        if ($interface instanceof self) {
+            $numerator = \bcmul($this->numerator->getNumber(), $interface->numerator->getNumber());
+            $denominator = \bcmul($this->denominator->getNumber(), $interface->denominator->getNumber());
+
+            return new BigFraction(BigInteger::fromString($numerator), BigInteger::fromString($denominator));
+        }
+
+        if ($interface instanceof BigNumber) {
+            return $interface->multiplyBy($interface);
+        }
+
+        throw new OperationException(
+            \sprintf('Operation not implemented with object `%s`', \get_class($interface))
+        );
     }
 
+    /**
+     * @param BasicOperationsInterface $interface
+     * @return BasicOperationsInterface
+     * @throws ArgumentNotMatchPatternException
+     * @throws OperationException
+     * @throws ParseNumberException
+     */
     public function divideBy(BasicOperationsInterface $interface): BasicOperationsInterface
     {
-        // TODO: Implement divideBy() method.
+        if ($interface instanceof BigFraction) {
+            return $this->multiplyBy(new BigFraction(clone $this->denominator, clone $this->numerator));
+        }
+
+        if ($interface instanceof BigNumber) {
+            return $interface->divideBy(new BigFraction());
+        }
     }
 
     public function getNumerator(): BigInteger
