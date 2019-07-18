@@ -22,6 +22,28 @@ use PHPUnit\Framework\TestCase;
  */
 final class BigFractionTest extends TestCase
 {
+    /** @var BigFraction */
+    public $bf1;
+    /** @var BigFraction */
+    public $bf2;
+    /** @var BigFraction */
+    public $bf3;
+    /** @var BigNumber */
+    public $number1;
+
+    /**
+     * @throws ArgumentNotMatchPatternException
+     * @throws ParseNumberException
+     */
+    protected function setUp(): void
+    {
+        parent::setUpBeforeClass();
+        $this->bf1 = new BigFraction(BigInteger::fromString('3'), BigInteger::fromString('7'));
+        $this->bf2 = new BigFraction(BigInteger::fromString('4'), BigInteger::fromString('7'));
+        $this->bf3 = new BigFraction(BigInteger::fromString('13'), BigInteger::fromString('11'));
+        $this->number1 = BigNumber::fromString('45.21');
+    }
+
     /**
      * @throws ArgumentNotMatchPatternException
      * @throws ParseNumberException
@@ -29,31 +51,24 @@ final class BigFractionTest extends TestCase
      */
     public function test Add(): void
     {
-        $bfOne = new BigFraction(BigInteger::fromString('3'), BigInteger::fromString('7'));
-        $bfTwo = new BigFraction(BigInteger::fromString('4'), BigInteger::fromString('7'));
-        $bfFour = new BigFraction(BigInteger::fromString('13'), BigInteger::fromString('11'));
-        $number = BigNumber::fromString('45.21');
+        /** @var BigFraction $bf */
+        $bf = $this->bf1->add($this->bf2);
+        static::assertInstanceOf(BigFraction::class, $bf);
 
-        /** @var BigFraction $bfThree */
-        $bfThree = $bfOne->add($bfTwo);
-        static::assertInstanceOf(BigFraction::class, $bfThree);
+        static::assertEquals('1', $bf->getNumerator());
+        static::assertEquals('1', $bf->getDenominator());
 
-        static::assertEquals('1', $bfThree->getNumerator());
-        static::assertEquals('1', $bfThree->getDenominator());
+        $bf = $this->bf1->add($this->bf3);
+        static::assertInstanceOf(BigFraction::class, $bf);
 
-        /** @var BigFraction $bfFive */
-        $bfFive = $bfOne->add($bfFour);
-        static::assertInstanceOf(BigFraction::class, $bfFive);
+        static::assertEquals('124', $bf->getNumerator());
+        static::assertEquals('77', $bf->getDenominator());
 
-        static::assertEquals('124', $bfFive->getNumerator());
-        static::assertEquals('77', $bfFive->getDenominator());
+        $bf = $this->bf1->add($this->number1);
+        static::assertInstanceOf(BigFraction::class, $bf);
 
-        /** @var BigFraction $bfSix */
-        $bfSix = $bfOne->add($number);
-        static::assertInstanceOf(BigFraction::class, $bfFive);
-
-        static::assertEquals('31947', $bfSix->getNumerator());
-        static::assertEquals('700', $bfSix->getDenominator());
+        static::assertEquals('31947', $bf->getNumerator());
+        static::assertEquals('700', $bf->getDenominator());
     }
 
     /**
@@ -63,38 +78,77 @@ final class BigFractionTest extends TestCase
      */
     public function test Sub(): void
     {
-        $bfOne = new BigFraction(BigInteger::fromString('3'), BigInteger::fromString('7'));
-        $bfTwo = new BigFraction(BigInteger::fromString('4'), BigInteger::fromString('7'));
-        $bfFour = new BigFraction(BigInteger::fromString('13'), BigInteger::fromString('11'));
-        $number = BigNumber::fromString('45.21');
+        /** @var BigFraction $bf */
+        $bf = $this->bf1->sub($this->bf2);
+        static::assertInstanceOf(BigFraction::class, $bf);
 
-        /** @var BigFraction $bfThree */
-        $bfThree = $bfOne->sub($bfTwo);
-        static::assertInstanceOf(BigFraction::class, $bfThree);
+        static::assertEquals('-1', $bf->getNumerator());
+        static::assertEquals('7', $bf->getDenominator());
 
-        static::assertEquals('-1', $bfThree->getNumerator());
-        static::assertEquals('7', $bfThree->getDenominator());
+        $bf = $this->bf1->sub($this->bf3);
+        static::assertInstanceOf(BigFraction::class, $bf);
 
-        /** @var BigFraction $bfFive */
-        $bfFive = $bfOne->sub($bfFour);
-        static::assertInstanceOf(BigFraction::class, $bfFive);
+        static::assertEquals('-58', $bf->getNumerator());
+        static::assertEquals('77', $bf->getDenominator());
 
-        static::assertEquals('-58', $bfFive->getNumerator());
-        static::assertEquals('77', $bfFive->getDenominator());
+        $bf = $this->bf1->sub($this->number1);
+        static::assertInstanceOf(BigFraction::class, $bf);
 
-        /** @var BigFraction $bfSix */
-        $bfSix = $bfOne->sub($number);
-        static::assertInstanceOf(BigFraction::class, $bfFive);
-
-        static::assertEquals('-31347', $bfSix->getNumerator());
-        static::assertEquals('700', $bfSix->getDenominator());
+        static::assertEquals('-31347', $bf->getNumerator());
+        static::assertEquals('700', $bf->getDenominator());
     }
 
+    /**
+     * @throws ArgumentNotMatchPatternException
+     * @throws OperationException
+     * @throws ParseNumberException
+     */
     public function test MultiplyBy(): void
     {
+        /** @var BigFraction $bf */
+        $bf = $this->bf1->multiplyBy($this->bf2);
+        static::assertInstanceOf(BigFraction::class, $bf);
+
+        static::assertEquals('12', $bf->getNumerator());
+        static::assertEquals('49', $bf->getDenominator());
+
+        $bf = $this->bf1->multiplyBy($this->bf3);
+        static::assertInstanceOf(BigFraction::class, $bf);
+
+        static::assertEquals('39', $bf->getNumerator());
+        static::assertEquals('77', $bf->getDenominator());
+
+        $bf = $this->bf1->multiplyBy($this->number1);
+        static::assertInstanceOf(BigFraction::class, $bf);
+
+        static::assertEquals('13563', $bf->getNumerator());
+        static::assertEquals('700', $bf->getDenominator());
     }
 
+    /**
+     * @throws ArgumentNotMatchPatternException
+     * @throws OperationException
+     * @throws ParseNumberException
+     */
     public function test DivideBy(): void
     {
+        /** @var BigFraction $bf */
+        $bf = $this->bf1->divideBy($this->bf2);
+        static::assertInstanceOf(BigFraction::class, $bf);
+
+        static::assertEquals('3', $bf->getNumerator());
+        static::assertEquals('4', $bf->getDenominator());
+
+        $bf = $this->bf1->divideBy($this->bf3);
+        static::assertInstanceOf(BigFraction::class, $bf);
+
+        static::assertEquals('33', $bf->getNumerator());
+        static::assertEquals('91', $bf->getDenominator());
+
+        $bf = $this->bf1->divideBy($this->number1);
+        static::assertInstanceOf(BigFraction::class, $bf);
+
+        static::assertEquals('100', $bf->getNumerator());
+        static::assertEquals('10549', $bf->getDenominator());
     }
 }

@@ -7,13 +7,6 @@ $link = '@link https://github.com/MockingMagician/mathoraptor/blob/master/README
 
 $finder = PhpCsFixer\Finder::create()
     ->exclude('vendor')
-    ->filter(static function (SplFileInfo $fileInfo) {
-        if (preg_match('/Interface\.php$/', $fileInfo->getFilename())) {
-            return false;
-        }
-
-        return true;
-    })
     ->in(__DIR__)
 ;
 

@@ -141,7 +141,7 @@ class BigFraction implements BasicOperationsInterface
     public function divideBy(BasicOperationsInterface $interface): BasicOperationsInterface
     {
         if ($interface instanceof BigFraction) {
-            return $this->multiplyBy(new BigFraction(clone $this->denominator, clone $this->numerator));
+            return $this->multiplyBy(new BigFraction(clone $interface->denominator, clone $interface->numerator));
         }
 
         if ($interface instanceof BigNumber) {
