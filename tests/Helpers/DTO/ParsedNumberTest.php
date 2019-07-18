@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @author Marc MOREAU <moreau.marc.web@gmail.com>
  * @license https://github.com/MockingMagician/mathoraptor/blob/master/LICENSE.md Apache License 2.0
@@ -14,19 +16,20 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
+ * @coversNothing
  */
 final class ParsedNumberTest extends TestCase
 {
     /**
      * @throws ArgumentNotMatchPatternException
      */
-    public function test new ok()
+    public function test new ok(): void
     {
         $number = new ParsedNumber('+', '123456', '654321', '+', 1);
-        $this->assertInstanceOf(ParsedNumber::class, $number);
+        static::assertInstanceOf(ParsedNumber::class, $number);
     }
 
-    public function test new ko()
+    public function test new ko(): void
     {
         $e = null;
 
@@ -35,7 +38,7 @@ final class ParsedNumberTest extends TestCase
         } catch (\Exception $e) {
         }
 
-        $this->assertInstanceOf(ArgumentNotMatchPatternException::class, $e);
+        static::assertInstanceOf(ArgumentNotMatchPatternException::class, $e);
 
         $e = null;
 
@@ -44,7 +47,7 @@ final class ParsedNumberTest extends TestCase
         } catch (\Exception $e) {
         }
 
-        $this->assertInstanceOf(ArgumentNotMatchPatternException::class, $e);
+        static::assertInstanceOf(ArgumentNotMatchPatternException::class, $e);
 
         $e = null;
 
@@ -53,7 +56,7 @@ final class ParsedNumberTest extends TestCase
         } catch (\Exception $e) {
         }
 
-        $this->assertInstanceOf(ArgumentNotMatchPatternException::class, $e);
+        static::assertInstanceOf(ArgumentNotMatchPatternException::class, $e);
 
         $e = null;
 
@@ -62,39 +65,39 @@ final class ParsedNumberTest extends TestCase
         } catch (\Exception $e) {
         }
 
-        $this->assertInstanceOf(ArgumentNotMatchPatternException::class, $e);
+        static::assertInstanceOf(ArgumentNotMatchPatternException::class, $e);
     }
 
     /**
      * @throws ArgumentNotMatchPatternException
      */
-    public function test literal()
+    public function test literal(): void
     {
         $number = new ParsedNumber('+', '1234', '5678', '+', 0);
-        $this->assertEquals('1234.5678', $number->getLiteral());
+        static::assertEquals('1234.5678', $number->getLiteral());
 
         $number = new ParsedNumber('-', '1234', '5678', '-', 0);
-        $this->assertEquals('-1234.5678', $number->getLiteral());
+        static::assertEquals('-1234.5678', $number->getLiteral());
 
         $number = new ParsedNumber('+', '1234', '5678', '+', 2);
-        $this->assertEquals('123456.78', $number->getLiteral());
+        static::assertEquals('123456.78', $number->getLiteral());
 
         $number = new ParsedNumber('-', '1234', '5678', '+', 4);
-        $this->assertEquals('-12345678', $number->getLiteral());
+        static::assertEquals('-12345678', $number->getLiteral());
 
         $number = new ParsedNumber('+', '1234', '5678', '+', 6);
-        $this->assertEquals('1234567800', $number->getLiteral());
+        static::assertEquals('1234567800', $number->getLiteral());
 
         $number = new ParsedNumber('-', '1234', '5678', '-', 2);
-        $this->assertEquals('-12.345678', $number->getLiteral());
+        static::assertEquals('-12.345678', $number->getLiteral());
 
         $number = new ParsedNumber('+', '1234', '5678', '-', 4);
-        $this->assertEquals('0.12345678', $number->getLiteral());
+        static::assertEquals('0.12345678', $number->getLiteral());
 
         $number = new ParsedNumber('-', '1234', '5678', '-', 6);
-        $this->assertEquals('-0.0012345678', $number->getLiteral());
+        static::assertEquals('-0.0012345678', $number->getLiteral());
 
         $number = new ParsedNumber('+', '000000001234', '5678000000', '-', 6);
-        $this->assertEquals('0.0012345678', $number->getLiteral());
+        static::assertEquals('0.0012345678', $number->getLiteral());
     }
 }

@@ -14,6 +14,9 @@ use MockingMagician\Mathoraptor\Exceptions\ArgumentNotMatchPatternException;
 use MockingMagician\Mathoraptor\Exceptions\ParseNumberException;
 use MockingMagician\Mathoraptor\Helpers\DTO\ParsedNumber;
 
+/**
+ * Class Parser.
+ */
 final class Parser
 {
     /** @var ParsedNumber */
@@ -27,7 +30,7 @@ final class Parser
      */
     private function __construct(string $number)
     {
-        if (!\preg_match(Constants::PARSE_NUMBER_PATTERN, $number, $matches)) {
+        if (!preg_match(Constants::PARSE_NUMBER_PATTERN, $number, $matches)) {
             throw new ParseNumberException($number);
         }
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @author Marc MOREAU <moreau.marc.web@gmail.com>
  * @license https://github.com/MockingMagician/mathoraptor/blob/master/LICENSE.md Apache License 2.0
@@ -8,6 +10,9 @@
 
 namespace MockingMagician\Mathoraptor\Helpers;
 
+/**
+ * Class Constants.
+ */
 final class Constants
 {
     public const PARSE_NUMBER_PATTERN = '#^(?:[^\d+-]*)([+-]?)([\d]+)(?:\.([\d]+))?(?:e([+-]?)([\d]+))?(?:[^\d+-]*)$#';

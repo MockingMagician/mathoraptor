@@ -8,7 +8,6 @@
 
 namespace MockingMagician\Mathoraptor\Operation;
 
-use MockingMagician\Mathoraptor\Number\BigNumber;
 
 interface BasicOperationsInterface
 {

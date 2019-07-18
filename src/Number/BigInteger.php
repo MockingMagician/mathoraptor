@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @author Marc MOREAU <moreau.marc.web@gmail.com>
  * @license https://github.com/MockingMagician/mathoraptor/blob/master/LICENSE.md Apache License 2.0
@@ -27,7 +29,7 @@ class BigInteger extends BigNumber
     protected function __construct(string $number)
     {
         parent::__construct($number);
-        if (!\preg_match(Constants::INTEGER_PATTERN, $this->number)) {
+        if (!preg_match(Constants::INTEGER_PATTERN, $this->number)) {
             throw new ParseIntegerException($this->number);
         }
     }

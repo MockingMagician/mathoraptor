@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @author Marc MOREAU <moreau.marc.web@gmail.com>
  * @license https://github.com/MockingMagician/mathoraptor/blob/master/LICENSE.md Apache License 2.0
@@ -65,20 +67,20 @@ class BigNumber implements BasicOperationsInterface
 
     public function getIntegerPart()
     {
-        if (false === \strpos($this->number, '.')) {
+        if (false === strpos($this->number, '.')) {
             return $this->number;
         }
 
-        return \explode('.', $this->number)[0];
+        return explode('.', $this->number)[0];
     }
 
     public function getDecimalPart()
     {
-        if (false === \strpos($this->number, '.')) {
+        if (false === strpos($this->number, '.')) {
             return '';
         }
 
-        return \explode('.', $this->number)[1];
+        return explode('.', $this->number)[1];
     }
 
     /**
@@ -93,28 +95,28 @@ class BigNumber implements BasicOperationsInterface
     public function add(BasicOperationsInterface $interface): BasicOperationsInterface
     {
         if ($interface instanceof self) {
-            $length = \max(\mb_strlen($this->getDecimalPart()), \mb_strlen($interface->getDecimalPart()));
+            $length = max(mb_strlen($this->getDecimalPart()), mb_strlen($interface->getDecimalPart()));
 
-            return BigNumber::fromString(\bcadd($this->number, $interface->number, $length));
+            return BigNumber::fromString(bcadd($this->number, $interface->number, $length));
         }
 
         if ($interface instanceof BigFraction) {
-            $length = \mb_strlen($this->getDecimalPart());
-            $numerator = \bcmul($this->getNumber(), $interface->getDenominator()->getNumber(), $length);
-            $numerator = \bcadd($numerator, $interface->getNumerator()->getNumber(), $length);
+            $length = mb_strlen($this->getDecimalPart());
+            $numerator = bcmul($this->getNumber(), $interface->getDenominator()->getNumber(), $length);
+            $numerator = bcadd($numerator, $interface->getNumerator()->getNumber(), $length);
             $denominator = $interface->getDenominator()->getNumber();
-            $length = (string) \mb_strlen(BigNumber::fromString($numerator)->getDecimalPart());
+            $length = (string) mb_strlen(BigNumber::fromString($numerator)->getDecimalPart());
             if ($length > 0) {
-                $multiply = \bcpow('10', $length);
-                $numerator = \bcmul($numerator, $multiply);
-                $denominator = \bcmul($denominator, $multiply);
+                $multiply = bcpow('10', $length);
+                $numerator = bcmul($numerator, $multiply);
+                $denominator = bcmul($denominator, $multiply);
             }
 
             return new BigFraction(BigInteger::fromString($numerator), BigInteger::fromString($denominator));
         }
 
         throw new OperationException(
-            \sprintf('Operation not implemented with object `%s`', \get_class($interface))
+            sprintf('Operation not implemented with object `%s`', \get_class($interface))
         );
     }
 
@@ -130,28 +132,28 @@ class BigNumber implements BasicOperationsInterface
     public function sub(BasicOperationsInterface $interface): BasicOperationsInterface
     {
         if ($interface instanceof self) {
-            $length = \max(\mb_strlen($this->getDecimalPart()), \mb_strlen($interface->getDecimalPart()));
+            $length = max(mb_strlen($this->getDecimalPart()), mb_strlen($interface->getDecimalPart()));
 
-            return BigNumber::fromString(\bcsub($this->number, $interface->number, $length));
+            return BigNumber::fromString(bcsub($this->number, $interface->number, $length));
         }
 
         if ($interface instanceof BigFraction) {
-            $length = \mb_strlen($this->getDecimalPart());
-            $numerator = \bcmul($this->getNumber(), $interface->getDenominator()->getNumber(), $length);
-            $numerator = \bcsub($numerator, $interface->getNumerator()->getNumber(), $length);
+            $length = mb_strlen($this->getDecimalPart());
+            $numerator = bcmul($this->getNumber(), $interface->getDenominator()->getNumber(), $length);
+            $numerator = bcsub($numerator, $interface->getNumerator()->getNumber(), $length);
             $denominator = $interface->getDenominator()->getNumber();
-            $length = (string) \mb_strlen(BigNumber::fromString($numerator)->getDecimalPart());
+            $length = (string) mb_strlen(BigNumber::fromString($numerator)->getDecimalPart());
             if ($length > 0) {
-                $multiply = \bcpow('10', $length);
-                $numerator = \bcmul($numerator, $multiply);
-                $denominator = \bcmul($denominator, $multiply);
+                $multiply = bcpow('10', $length);
+                $numerator = bcmul($numerator, $multiply);
+                $denominator = bcmul($denominator, $multiply);
             }
 
             return new BigFraction(BigInteger::fromString($numerator), BigInteger::fromString($denominator));
         }
 
         throw new OperationException(
-            \sprintf('Operation not implemented with object `%s`', \get_class($interface))
+            sprintf('Operation not implemented with object `%s`', \get_class($interface))
         );
     }
 
@@ -167,27 +169,27 @@ class BigNumber implements BasicOperationsInterface
     public function multiplyBy(BasicOperationsInterface $interface): BasicOperationsInterface
     {
         if ($interface instanceof self) {
-            $length = \mb_strlen($this->getDecimalPart()) + \mb_strlen($interface->getDecimalPart());
+            $length = mb_strlen($this->getDecimalPart()) + mb_strlen($interface->getDecimalPart());
 
-            return BigNumber::fromString(\bcmul($this->number, $interface->number, $length));
+            return BigNumber::fromString(bcmul($this->number, $interface->number, $length));
         }
 
         if ($interface instanceof BigFraction) {
-            $length = \mb_strlen($this->getDecimalPart());
-            $numerator = \bcmul($this->getNumber(), $interface->getNumerator()->getNumber(), $length);
+            $length = mb_strlen($this->getDecimalPart());
+            $numerator = bcmul($this->getNumber(), $interface->getNumerator()->getNumber(), $length);
             $denominator = $interface->getDenominator()->getNumber();
-            $length = (string) \mb_strlen(BigNumber::fromString($numerator)->getDecimalPart());
+            $length = (string) mb_strlen(BigNumber::fromString($numerator)->getDecimalPart());
             if ($length > 0) {
-                $multiply = \bcpow('10', $length);
-                $numerator = \bcmul($numerator, $multiply);
-                $denominator = \bcmul($denominator, $multiply);
+                $multiply = bcpow('10', $length);
+                $numerator = bcmul($numerator, $multiply);
+                $denominator = bcmul($denominator, $multiply);
             }
 
             return new BigFraction(BigInteger::fromString($numerator), BigInteger::fromString($denominator));
         }
 
         throw new OperationException(
-            \sprintf('Operation not implemented with object `%s`', \get_class($interface))
+            sprintf('Operation not implemented with object `%s`', \get_class($interface))
         );
     }
 
@@ -203,12 +205,12 @@ class BigNumber implements BasicOperationsInterface
     public function divideBy(BasicOperationsInterface $interface): BasicOperationsInterface
     {
         if ($interface instanceof self) {
-            $length = (string) \max(\mb_strlen($this->getDecimalPart()), \mb_strlen($interface->getDecimalPart()));
-            $multiply = \bcpow('10', $length);
+            $length = (string) max(mb_strlen($this->getDecimalPart()), mb_strlen($interface->getDecimalPart()));
+            $multiply = bcpow('10', $length);
 
             return new BigFraction(
-                BigInteger::fromString(\bcmul($this->number, $multiply)),
-                BigInteger::fromString(\bcmul($interface->number, $multiply))
+                BigInteger::fromString(bcmul($this->number, $multiply)),
+                BigInteger::fromString(bcmul($interface->number, $multiply))
             );
         }
 
@@ -217,8 +219,25 @@ class BigNumber implements BasicOperationsInterface
         }
 
         throw new OperationException(
-            \sprintf('Operation not implemented with object `%s`', \get_class($interface))
+            sprintf('Operation not implemented with object `%s`', \get_class($interface))
         );
+    }
+
+    /**
+     * @throws ArgumentNotMatchPatternException
+     * @throws ParseNumberException
+     *
+     * @return BigFraction
+     */
+    public function toBigFraction(): BigFraction
+    {
+        $denominator = '1';
+        $zeros = mb_strlen($this->getDecimalPart());
+        while (0 < $zeros--) {
+            $denominator .= '0';
+        }
+
+        return new BigFraction(BigInteger::fromString($this->getIntegerPart().$this->getDecimalPart()), BigInteger::fromString($denominator));
     }
 
     public function getNumber(): string

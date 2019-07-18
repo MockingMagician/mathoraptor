@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @author Marc MOREAU <moreau.marc.web@gmail.com>
  * @license https://github.com/MockingMagician/mathoraptor/blob/master/LICENSE.md Apache License 2.0
@@ -13,6 +15,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
+ * @coversNothing
  */
 final class ParserTest extends TestCase
 {
@@ -20,7 +23,7 @@ final class ParserTest extends TestCase
      * @throws ParseNumberException
      * @throws ArgumentNotMatchPatternException
      */
-    public function test parse number exception()
+    public function test parse number exception(): void
     {
         $this->expectException(ParseNumberException::class);
         Parser::parseNumber('azerty');
@@ -30,7 +33,7 @@ final class ParserTest extends TestCase
      * @throws ParseNumberException
      * @throws ArgumentNotMatchPatternException
      */
-    public function test parse number ok()
+    public function test parse number ok(): void
     {
         $toTest = [
             [' +0012.15684000', '12.15684'],
@@ -41,7 +44,7 @@ final class ParserTest extends TestCase
         ];
 
         foreach ($toTest as $test) {
-            $this->assertEquals($test[1], Parser::parseNumber($test[0]));
+            static::assertEquals($test[1], Parser::parseNumber($test[0]));
         }
     }
 }

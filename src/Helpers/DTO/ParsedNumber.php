@@ -13,7 +13,10 @@ namespace MockingMagician\Mathoraptor\Helpers\DTO;
 use MockingMagician\Mathoraptor\Exceptions\ArgumentNotMatchPatternException;
 use MockingMagician\Mathoraptor\Helpers\Constants;
 
-class ParsedNumber
+/**
+ * Class ParsedNumber.
+ */
+final class ParsedNumber
 {
     private $sign;
     private $integerPart;
@@ -42,22 +45,22 @@ class ParsedNumber
         string $exponentSign,
         int $exponent
     ) {
-        if (!\preg_match(Constants::SIGN_PATTERN, $sign)) {
+        if (!preg_match(Constants::SIGN_PATTERN, $sign)) {
             throw new ArgumentNotMatchPatternException($sign, Constants::SIGN_PATTERN);
         }
         $this->sign = $sign;
 
-        if (!\preg_match(Constants::ONE_OR_MORE_DIGIT_PATTERN, $integerPart)) {
+        if (!preg_match(Constants::ONE_OR_MORE_DIGIT_PATTERN, $integerPart)) {
             throw new ArgumentNotMatchPatternException($integerPart, Constants::ONE_OR_MORE_DIGIT_PATTERN);
         }
         $this->integerPart = $integerPart;
 
-        if (!\preg_match(Constants::ONE_OR_MORE_DIGIT_PATTERN, $decimalPart)) {
+        if (!preg_match(Constants::ONE_OR_MORE_DIGIT_PATTERN, $decimalPart)) {
             throw new ArgumentNotMatchPatternException($decimalPart, Constants::ONE_OR_MORE_DIGIT_PATTERN);
         }
         $this->decimalPart = $decimalPart;
 
-        if (!\preg_match(Constants::SIGN_PATTERN, $exponentSign)) {
+        if (!preg_match(Constants::SIGN_PATTERN, $exponentSign)) {
             throw new ArgumentNotMatchPatternException($exponentSign, Constants::SIGN_PATTERN);
         }
         $this->exponentSign = $exponentSign;
@@ -125,20 +128,20 @@ class ParsedNumber
 
         if ('+' === $this->exponentSign && 0 !== $this->exponent) {
             $integerPart = $this->integerPart;
-            $decimalLength = \mb_strlen($this->decimalPart);
+            $decimalLength = mb_strlen($this->decimalPart);
             $diff = (int) ($this->exponent - $decimalLength);
 
             if (0 < $diff) {
                 $integerPart .= $this->decimalPart;
-                $integerPart .= \str_pad('', $diff, '0');
+                $integerPart .= str_pad('', $diff, '0');
                 $decimalPart = '0';
 
                 return [$integerPart, $decimalPart];
             }
 
             if (0 > $diff = $this->exponent - $decimalLength) {
-                $integerPart .= \mb_substr($this->decimalPart, 0, (int) ($decimalLength + $diff));
-                $decimalPart = \mb_substr($this->decimalPart, $diff);
+                $integerPart .= mb_substr($this->decimalPart, 0, (int) ($decimalLength + $diff));
+                $decimalPart = mb_substr($this->decimalPart, $diff);
 
                 return [$integerPart, $decimalPart];
             }
@@ -151,20 +154,20 @@ class ParsedNumber
 
         // if ('-' === $this->exponentSign  && 0 !== $this->exponent)
         $decimalPart = $this->decimalPart;
-        $integerLength = \mb_strlen($this->integerPart);
+        $integerLength = mb_strlen($this->integerPart);
         $diff = (int) ($this->exponent - $integerLength);
 
         if (0 < $diff) {
             $decimalPart = $this->integerPart.$decimalPart;
-            $decimalPart = \str_pad('', $diff, '0').$decimalPart;
+            $decimalPart = str_pad('', $diff, '0').$decimalPart;
             $integerPart = '0';
 
             return [$integerPart, $decimalPart];
         }
 
         if (0 > $diff) {
-            $decimalPart = \mb_substr($this->integerPart, \abs($diff)).$decimalPart;
-            $integerPart = \mb_substr($this->integerPart, 0, \abs($diff));
+            $decimalPart = mb_substr($this->integerPart, abs($diff)).$decimalPart;
+            $integerPart = mb_substr($this->integerPart, 0, abs($diff));
 
             return [$integerPart, $decimalPart];
         }
@@ -179,8 +182,8 @@ class ParsedNumber
     {
         $cleaned = $this->getCleanIntegerAndDecimalFromExponent();
         $literal = '-' === $this->sign ? '-' : '';
-        $literal .= ('' === ($integer = \ltrim($cleaned[0], '0'))) ? '0' : $integer;
-        $literal .= \rtrim('.'.$cleaned[1], '.0');
+        $literal .= ('' === ($integer = ltrim($cleaned[0], '0'))) ? '0' : $integer;
+        $literal .= rtrim('.'.$cleaned[1], '.0');
 
         return $literal;
     }
