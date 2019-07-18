@@ -30,7 +30,7 @@ final class Parser
      */
     private function __construct(string $number)
     {
-        if (!preg_match(Constants::PARSE_NUMBER_PATTERN, $number, $matches)) {
+        if (!\preg_match(Constants::PARSE_NUMBER_PATTERN, $number, $matches)) {
             throw new ParseNumberException($number);
         }
 

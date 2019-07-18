@@ -42,19 +42,19 @@ final class BigNumberTest extends TestCase
         $n2 = BigNumber::fromString('123.4567');
         $r1 = $n1->add($n2);
         static::assertInstanceOf(BigNumber::class, $r1);
-        // @var BigNumber $r1
+        /** @var BigNumber $r1 */
         static::assertEquals('1234.5678', $r1->getNumber());
 
         $n3 = BigInteger::fromString('123');
         $r2 = $n1->add($n3);
         static::assertInstanceOf(BigNumber::class, $r2);
-        // @var BigNumber $r2
+        /** @var BigNumber $r2 */
         static::assertEquals('1234.1111', $r2->getNumber());
 
         $n4 = new BigFraction(BigInteger::fromString('4'), BigInteger::fromString('2'));
         $r3 = $n1->add($n4);
         static::assertInstanceOf(BigFraction::class, $r3);
-        // @var BigFraction $r3
+        /** @var BigFraction $r3 */
         static::assertEquals('11131111', $r3->getNumerator()->getNumber());
         static::assertEquals('10000', $r3->getDenominator()->getNumber());
     }
@@ -70,19 +70,19 @@ final class BigNumberTest extends TestCase
         $n2 = BigNumber::fromString('123.4567');
         $r1 = $n1->sub($n2);
         static::assertInstanceOf(BigNumber::class, $r1);
-        // @var BigNumber $r1
+        /** @var BigNumber $r1 */
         static::assertEquals('1111.1111', $r1->getNumber());
 
         $n3 = BigInteger::fromString('123');
         $r2 = $n1->sub($n3);
         static::assertInstanceOf(BigNumber::class, $r2);
-        // @var BigNumber $r2
+        /** @var BigNumber $r2 */
         static::assertEquals('1111.5678', $r2->getNumber());
 
         $n4 = new BigFraction(BigInteger::fromString('4'), BigInteger::fromString('2'));
         $r3 = $n1->sub($n4);
         static::assertInstanceOf(BigFraction::class, $r3);
-        // @var BigFraction $r3
+        /** @var BigFraction $r3 */
         static::assertEquals('6162839', $r3->getNumerator()->getNumber());
         static::assertEquals('5000', $r3->getDenominator()->getNumber());
     }
@@ -98,19 +98,19 @@ final class BigNumberTest extends TestCase
         $n2 = BigNumber::fromString('33.33');
         $r1 = $n1->multiplyBy($n2);
         static::assertInstanceOf(BigNumber::class, $r1);
-        // @var BigNumber $r1
+        /** @var BigNumber $r1 */
         static::assertEquals('740.5926', $r1->getNumber());
 
         $n3 = BigInteger::fromString('33');
         $r2 = $n1->multiplyBy($n3);
         static::assertInstanceOf(BigNumber::class, $r2);
-        // @var BigNumber $r2
+        /** @var BigNumber $r2 */
         static::assertEquals('733.26', $r2->getNumber());
 
         $n4 = new BigFraction(BigInteger::fromString('3'), BigInteger::fromString('2'));
         $r3 = $n1->multiplyBy($n4);
         static::assertInstanceOf(BigFraction::class, $r3);
-        // @var BigFraction $r3
+        /** @var BigFraction $r3 */
         static::assertEquals('3333', $r3->getNumerator()->getNumber());
         static::assertEquals('100', $r3->getDenominator()->getNumber());
     }
@@ -126,21 +126,21 @@ final class BigNumberTest extends TestCase
         $n2 = BigNumber::fromString('33.33');
         $r1 = $n1->divideBy($n2);
         static::assertInstanceOf(BigFraction::class, $r1);
-        // @var BigFraction $r1
+        /** @var BigFraction $r1 */
         static::assertEquals('202', $r1->getNumerator()->getNumber());
         static::assertEquals('303', $r1->getDenominator()->getNumber());
 
         $n3 = BigInteger::fromString('33');
         $r2 = $n1->divideBy($n3);
         static::assertInstanceOf(BigFraction::class, $r2);
-        // @var BigFraction $r2
+        /** @var BigFraction $r2 */
         static::assertEquals('101', $r2->getNumerator()->getNumber());
         static::assertEquals('150', $r2->getDenominator()->getNumber());
 
         $n4 = new BigFraction(BigInteger::fromString('3'), BigInteger::fromString('2'));
         $r3 = $n1->divideBy($n4);
         static::assertInstanceOf(BigFraction::class, $r3);
-        // @var BigFraction $r3
+        /** @var BigFraction $r3 */
         static::assertEquals('1111', $r3->getNumerator()->getNumber());
         static::assertEquals('75', $r3->getDenominator()->getNumber());
     }

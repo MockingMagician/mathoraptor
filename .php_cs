@@ -29,6 +29,11 @@ $config = PhpCsFixer\Config::create()
         'self_accessor' => false,
         'php_unit_strict' => false,
         'yoda_style' => true,
+        'native_function_invocation' => [
+            'include' => [
+                '@internal',
+            ],
+        ],
         'header_comment' => [
             'header' => implode("\n", [$author, $license, $link]),
             'comment_type' => 'PHPDoc',
