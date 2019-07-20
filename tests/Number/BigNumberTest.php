@@ -43,7 +43,7 @@ final class BigNumberTest extends TestCase
      * @throws ArgumentNotMatchPatternException
      * @throws ParseNumberException
      */
-    public function test getIntegerPart()
+    public function test getIntegerPart(): void
     {
         $bn = BigNumber::fromString('1234');
         static::assertEquals('1234', $bn->getIntegerPart());

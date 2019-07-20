@@ -36,7 +36,7 @@ try {
 // fraction
 $bigFraction = new BigFraction(BigInteger::fromString('11'), BigInteger::fromString('7'));
 
-// Available operation are :
+// for each number type, available operations are :
 // - add
 // - sub
 // - multiplyBy

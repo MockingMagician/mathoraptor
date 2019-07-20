@@ -19,6 +19,9 @@
             "MockingMagician\\Mathoraptor\\": "src"
         }
     },
+    "autoload-dev": {
+        "psr-4": { "MockingMagician\\Mathoraptor\\Benchmarks\\": "benchmarks" }
+    },
     "require": {
         "php": "^7.1.0"
     },

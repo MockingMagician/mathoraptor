@@ -30,6 +30,7 @@ final class BigIntegerTest extends TestCase
     {
         static::assertInstanceOf(BigInteger::class, BigInteger::fromString('123456'));
     }
+
     /**
      * @throws ArgumentNotMatchPatternException
      * @throws ParseNumberException
