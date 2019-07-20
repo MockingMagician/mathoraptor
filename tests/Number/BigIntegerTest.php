@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 use MockingMagician\Mathoraptor\Exceptions\ArgumentNotMatchPatternException;
 use MockingMagician\Mathoraptor\Exceptions\OperationException;
+use MockingMagician\Mathoraptor\Exceptions\ParseIntegerException;
 use MockingMagician\Mathoraptor\Exceptions\ParseNumberException;
 use MockingMagician\Mathoraptor\Number\BigFraction;
 use MockingMagician\Mathoraptor\Number\BigInteger;
@@ -18,7 +19,6 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
- * @coversNothing
  */
 final class BigIntegerTest extends TestCase
 {
@@ -29,6 +29,15 @@ final class BigIntegerTest extends TestCase
     public function testFromString(): void
     {
         static::assertInstanceOf(BigInteger::class, BigInteger::fromString('123456'));
+    }
+    /**
+     * @throws ArgumentNotMatchPatternException
+     * @throws ParseNumberException
+     */
+    public function testFromStringException(): void
+    {
+        static::expectException(ParseIntegerException::class);
+        static::assertInstanceOf(BigInteger::class, BigInteger::fromString('123456.789'));
     }
 
     /**

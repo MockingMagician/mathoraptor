@@ -14,14 +14,22 @@ use MockingMagician\Mathoraptor\Exceptions\ParseNumberException;
 use MockingMagician\Mathoraptor\Number\BigFraction;
 use MockingMagician\Mathoraptor\Number\BigInteger;
 use MockingMagician\Mathoraptor\Number\BigNumber;
+use MockingMagician\Mathoraptor\Operation\BasicOperationsInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
- * @coversNothing
  */
 final class BigNumberTest extends TestCase
 {
+    private $notImplemented;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->notImplemented = $this->prophesize(BasicOperationsInterface::class)->reveal();
+    }
+
     /**
      * @throws ArgumentNotMatchPatternException
      * @throws ParseNumberException
@@ -29,6 +37,16 @@ final class BigNumberTest extends TestCase
     public function testFromString(): void
     {
         static::assertInstanceOf(BigNumber::class, BigNumber::fromString('1234.5678'));
+    }
+
+    /**
+     * @throws ArgumentNotMatchPatternException
+     * @throws ParseNumberException
+     */
+    public function test getIntegerPart()
+    {
+        $bn = BigNumber::fromString('1234');
+        static::assertEquals('1234', $bn->getIntegerPart());
     }
 
     /**
@@ -64,6 +82,17 @@ final class BigNumberTest extends TestCase
      * @throws ParseNumberException
      * @throws OperationException
      */
+    public function test Add throw exception(): void
+    {
+        static::expectException(OperationException::class);
+        BigNumber::fromString('1111.1111')->add($this->notImplemented);
+    }
+
+    /**
+     * @throws ArgumentNotMatchPatternException
+     * @throws ParseNumberException
+     * @throws OperationException
+     */
     public function testSub(): void
     {
         $n1 = BigNumber::fromString('1234.5678');
@@ -85,6 +114,17 @@ final class BigNumberTest extends TestCase
         /** @var BigFraction $r3 */
         static::assertEquals('6162839', $r3->getNumerator()->getNumber());
         static::assertEquals('5000', $r3->getDenominator()->getNumber());
+    }
+
+    /**
+     * @throws ArgumentNotMatchPatternException
+     * @throws ParseNumberException
+     * @throws OperationException
+     */
+    public function test sub throw exception(): void
+    {
+        static::expectException(OperationException::class);
+        BigNumber::fromString('1111.1111')->sub($this->notImplemented);
     }
 
     /**
@@ -117,6 +157,17 @@ final class BigNumberTest extends TestCase
 
     /**
      * @throws ArgumentNotMatchPatternException
+     * @throws ParseNumberException
+     * @throws OperationException
+     */
+    public function test multiplyBy throw exception(): void
+    {
+        static::expectException(OperationException::class);
+        BigNumber::fromString('1111.1111')->multiplyBy($this->notImplemented);
+    }
+
+    /**
+     * @throws ArgumentNotMatchPatternException
      * @throws OperationException
      * @throws ParseNumberException
      */
@@ -143,5 +194,16 @@ final class BigNumberTest extends TestCase
         /** @var BigFraction $r3 */
         static::assertEquals('1111', $r3->getNumerator()->getNumber());
         static::assertEquals('75', $r3->getDenominator()->getNumber());
+    }
+
+    /**
+     * @throws ArgumentNotMatchPatternException
+     * @throws ParseNumberException
+     * @throws OperationException
+     */
+    public function test divideBy throw exception(): void
+    {
+        static::expectException(OperationException::class);
+        BigNumber::fromString('1111.1111')->divideBy($this->notImplemented);
     }
 }

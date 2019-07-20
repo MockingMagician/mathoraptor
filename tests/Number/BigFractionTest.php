@@ -14,11 +14,11 @@ use MockingMagician\Mathoraptor\Exceptions\ParseNumberException;
 use MockingMagician\Mathoraptor\Number\BigFraction;
 use MockingMagician\Mathoraptor\Number\BigInteger;
 use MockingMagician\Mathoraptor\Number\BigNumber;
+use MockingMagician\Mathoraptor\Operation\BasicOperationsInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
- * @coversNothing
  */
 final class BigFractionTest extends TestCase
 {
@@ -30,6 +30,8 @@ final class BigFractionTest extends TestCase
     public $bf3;
     /** @var BigNumber */
     public $number1;
+    /** @var BasicOperationsInterface */
+    private $notImplemented;
 
     /**
      * @throws ArgumentNotMatchPatternException
@@ -37,11 +39,12 @@ final class BigFractionTest extends TestCase
      */
     protected function setUp(): void
     {
-        parent::setUpBeforeClass();
+        parent::setUp();
         $this->bf1 = new BigFraction(BigInteger::fromString('3'), BigInteger::fromString('7'));
         $this->bf2 = new BigFraction(BigInteger::fromString('4'), BigInteger::fromString('7'));
         $this->bf3 = new BigFraction(BigInteger::fromString('13'), BigInteger::fromString('11'));
         $this->number1 = BigNumber::fromString('45.21');
+        $this->notImplemented = $this->prophesize(BasicOperationsInterface::class)->reveal();
     }
 
     /**
@@ -73,6 +76,17 @@ final class BigFractionTest extends TestCase
 
     /**
      * @throws ArgumentNotMatchPatternException
+     * @throws ParseNumberException
+     * @throws OperationException
+     */
+    public function test Add throw exception(): void
+    {
+        static::expectException(OperationException::class);
+        $this->bf1->add($this->notImplemented);
+    }
+
+    /**
+     * @throws ArgumentNotMatchPatternException
      * @throws OperationException
      * @throws ParseNumberException
      */
@@ -96,6 +110,17 @@ final class BigFractionTest extends TestCase
 
         static::assertEquals('-31347', $bf->getNumerator());
         static::assertEquals('700', $bf->getDenominator());
+    }
+
+    /**
+     * @throws ArgumentNotMatchPatternException
+     * @throws ParseNumberException
+     * @throws OperationException
+     */
+    public function test Sub throw exception(): void
+    {
+        static::expectException(OperationException::class);
+        $this->bf1->sub($this->notImplemented);
     }
 
     /**
@@ -127,6 +152,17 @@ final class BigFractionTest extends TestCase
 
     /**
      * @throws ArgumentNotMatchPatternException
+     * @throws ParseNumberException
+     * @throws OperationException
+     */
+    public function test MultiplyBy throw exception(): void
+    {
+        static::expectException(OperationException::class);
+        $this->bf1->multiplyBy($this->notImplemented);
+    }
+
+    /**
+     * @throws ArgumentNotMatchPatternException
      * @throws OperationException
      * @throws ParseNumberException
      */
@@ -150,5 +186,16 @@ final class BigFractionTest extends TestCase
 
         static::assertEquals('100', $bf->getNumerator());
         static::assertEquals('10549', $bf->getDenominator());
+    }
+
+    /**
+     * @throws ArgumentNotMatchPatternException
+     * @throws ParseNumberException
+     * @throws OperationException
+     */
+    public function test DivideBy throw exception(): void
+    {
+        static::expectException(OperationException::class);
+        $this->bf1->divideBy($this->notImplemented);
     }
 }

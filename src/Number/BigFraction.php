@@ -36,11 +36,14 @@ class BigFraction implements BasicOperationsInterface
         $this->reduce();
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function __debugInfo()
     {
         return [
-            'numerator' => $this->numerator,
-            'denominator' => $this->denominator,
+            'numerator' => $this->numerator->getNumber(),
+            'denominator' => $this->denominator->getNumber(),
         ];
     }
 
