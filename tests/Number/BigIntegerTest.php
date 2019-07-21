@@ -8,6 +8,8 @@ declare(strict_types=1);
  * @link https://github.com/MockingMagician/mathoraptor/blob/master/README.md
  */
 
+namespace MockingMagician\Mathoraptor\Tests\Number;
+
 use MockingMagician\Mathoraptor\Exceptions\ArgumentNotMatchPatternException;
 use MockingMagician\Mathoraptor\Exceptions\OperationException;
 use MockingMagician\Mathoraptor\Exceptions\ParseIntegerException;

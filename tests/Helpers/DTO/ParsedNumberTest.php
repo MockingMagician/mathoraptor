@@ -8,7 +8,7 @@ declare(strict_types=1);
  * @link https://github.com/MockingMagician/mathoraptor/blob/master/README.md
  */
 
-namespace MockingMagician\Mathoraptor\Tests\Helpers\DTO\ParsedNumber;
+namespace MockingMagician\Mathoraptor\Tests\Helpers\DTO;
 
 use MockingMagician\Mathoraptor\Exceptions\ArgumentNotMatchPatternException;
 use MockingMagician\Mathoraptor\Helpers\DTO\ParsedNumber;

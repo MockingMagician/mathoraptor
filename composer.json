@@ -20,7 +20,10 @@
         }
     },
     "autoload-dev": {
-        "psr-4": { "MockingMagician\\Mathoraptor\\Benchmarks\\": "benchmarks" }
+        "psr-4": {
+            "MockingMagician\\Mathoraptor\\Benchmarks\\": "benchmarks",
+            "MockingMagician\\Mathoraptor\\Tests\\": "tests"
+        }
     },
     "require": {
         "php": "^7.1.0"
