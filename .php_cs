@@ -2,7 +2,7 @@
 <?php
 
 $author = '@author Marc MOREAU <moreau.marc.web@gmail.com>';
-$license = '@license https://github.com/MockingMagician/mathoraptor/blob/master/LICENSE.md Apache License 2.0';
+$license = '@license https://github.com/MockingMagician/mathoraptor/blob/master/LICENSE.md CC-BY-SA-4.0';
 $link = '@link https://github.com/MockingMagician/mathoraptor/blob/master/README.md';
 
 $finder = PhpCsFixer\Finder::create()

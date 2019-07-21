@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * @author Marc MOREAU <moreau.marc.web@gmail.com>
- * @license https://github.com/MockingMagician/mathoraptor/blob/master/LICENSE.md Apache License 2.0
+ * @license https://github.com/MockingMagician/mathoraptor/blob/master/LICENSE.md CC-BY-SA-4.0
  * @link https://github.com/MockingMagician/mathoraptor/blob/master/README.md
  */
 
@@ -17,7 +17,6 @@ use MockingMagician\Mathoraptor\Number\BigFraction;
 use PhpBench\Benchmark\Metadata\Annotations\Iterations;
 use PhpBench\Benchmark\Metadata\Annotations\OutputMode;
 use PhpBench\Benchmark\Metadata\Annotations\OutputTimeUnit;
-use PhpBench\Benchmark\Metadata\Annotations\ParamProviders;
 use PhpBench\Benchmark\Metadata\Annotations\Revs;
 
 /**
