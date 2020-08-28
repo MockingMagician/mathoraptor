@@ -10,28 +10,32 @@ declare(strict_types=1);
 
 namespace MockingMagician\Mathoraptor\Benchmarks;
 
+use Exception;
+use Generator;
 use MockingMagician\Mathoraptor\Exceptions\ArgumentNotMatchPatternException;
 use MockingMagician\Mathoraptor\Exceptions\ParseNumberException;
 use MockingMagician\Mathoraptor\Number\BigFraction;
 use MockingMagician\Mathoraptor\Number\BigInteger;
 use MockingMagician\Mathoraptor\Number\BigNumber;
+use function mb_strlen;
+use function random_int;
 
 abstract class AbstractNumberProvider
 {
     /**
-     * @throws \Exception
+     * @throws Exception
      *
-     * @return \Generator
+     * @return Generator
      */
-    public function provideIntegerString(): \Generator
+    public function provideIntegerString(): Generator
     {
-        $papMaxIntLength = \mb_strlen((string) PHP_INT_MAX);
+        $papMaxIntLength = mb_strlen((string) PHP_INT_MAX);
 
         while (true) {
-            $sign = 0 === \random_int(0, 1) ? '+' : '-';
+            $sign = 0 === random_int(0, 1) ? '+' : '-';
             $integer = '';
-            while ($papMaxIntLength * 2 > \mb_strlen($integer)) {
-                $integer .= (string) \random_int(0, PHP_INT_MAX);
+            while ($papMaxIntLength * 2 > mb_strlen($integer)) {
+                $integer .= (string) random_int(0, PHP_INT_MAX);
             }
 
             yield $sign.$integer;
@@ -39,18 +43,18 @@ abstract class AbstractNumberProvider
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      *
-     * @return \Generator
+     * @return Generator
      */
-    public function provideNumberString(): \Generator
+    public function provideNumberString(): Generator
     {
-        $papMaxIntLength = \mb_strlen((string) PHP_INT_MAX);
+        $papMaxIntLength = mb_strlen((string) PHP_INT_MAX);
 
         while (true) {
             $integer = '';
-            while ($papMaxIntLength * 2 > \mb_strlen($integer)) {
-                $integer .= (string) \random_int(0, PHP_INT_MAX);
+            while ($papMaxIntLength * 2 > mb_strlen($integer)) {
+                $integer .= (string) random_int(0, PHP_INT_MAX);
             }
 
             yield $this->provideIntegerString()->current().'.'.$integer;
@@ -60,7 +64,7 @@ abstract class AbstractNumberProvider
     /**
      * @throws ArgumentNotMatchPatternException
      * @throws ParseNumberException
-     * @throws \Exception
+     * @throws Exception
      *
      * @return BigNumber
      */
@@ -72,7 +76,7 @@ abstract class AbstractNumberProvider
     /**
      * @throws ArgumentNotMatchPatternException
      * @throws ParseNumberException
-     * @throws \Exception
+     * @throws Exception
      *
      * @return BigInteger
      */
@@ -84,7 +88,7 @@ abstract class AbstractNumberProvider
     /**
      * @throws ArgumentNotMatchPatternException
      * @throws ParseNumberException
-     * @throws \Exception
+     * @throws Exception
      *
      * @return BigFraction
      */
