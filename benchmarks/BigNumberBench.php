@@ -49,8 +49,6 @@ class BigNumberBench extends AbstractNumberProvider
 
     /**
      * @throws \Exception
-     *
-     * @return \Generator
      */
     public function provideForBenchInstance(): \Generator
     {
@@ -60,8 +58,6 @@ class BigNumberBench extends AbstractNumberProvider
     /**
      * @ParamProviders({"provideForBenchInstance"})
      * @Revs(1000)
-     *
-     * @param array $number
      *
      * @throws ArgumentNotMatchPatternException
      * @throws ParseNumberException

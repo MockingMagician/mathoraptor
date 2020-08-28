@@ -17,17 +17,21 @@ use MockingMagician\Mathoraptor\Operation\BasicOperationsInterface;
 
 class BigFraction implements BasicOperationsInterface
 {
+    /**
+     * @var BigInteger
+     */
     private $numerator;
+    /**
+     * @var BigInteger
+     */
     private $denominator;
 
     /**
      * BigFraction constructor.
      *
-     * @param BigInteger $numerator
-     * @param BigInteger $denominator
-     *
      * @throws ArgumentNotMatchPatternException
      * @throws ParseNumberException
+     * @throws OperationException
      */
     public function __construct(BigInteger $numerator, BigInteger $denominator)
     {
@@ -38,6 +42,8 @@ class BigFraction implements BasicOperationsInterface
 
     /**
      * @codeCoverageIgnore
+     *
+     * @return string[]
      */
     public function __debugInfo()
     {
@@ -48,13 +54,9 @@ class BigFraction implements BasicOperationsInterface
     }
 
     /**
-     * @param BasicOperationsInterface $interface
-     *
      * @throws ArgumentNotMatchPatternException
      * @throws OperationException
      * @throws ParseNumberException
-     *
-     * @return BasicOperationsInterface
      */
     public function add(BasicOperationsInterface $interface): BasicOperationsInterface
     {
@@ -77,13 +79,9 @@ class BigFraction implements BasicOperationsInterface
     }
 
     /**
-     * @param BasicOperationsInterface $interface
-     *
      * @throws ArgumentNotMatchPatternException
      * @throws OperationException
      * @throws ParseNumberException
-     *
-     * @return BasicOperationsInterface
      */
     public function sub(BasicOperationsInterface $interface): BasicOperationsInterface
     {
@@ -106,13 +104,9 @@ class BigFraction implements BasicOperationsInterface
     }
 
     /**
-     * @param BasicOperationsInterface $interface
-     *
      * @throws ArgumentNotMatchPatternException
      * @throws OperationException
      * @throws ParseNumberException
-     *
-     * @return BasicOperationsInterface
      */
     public function multiplyBy(BasicOperationsInterface $interface): BasicOperationsInterface
     {
@@ -133,13 +127,9 @@ class BigFraction implements BasicOperationsInterface
     }
 
     /**
-     * @param BasicOperationsInterface $interface
-     *
      * @throws ArgumentNotMatchPatternException
      * @throws OperationException
      * @throws ParseNumberException
-     *
-     * @return BasicOperationsInterface
      */
     public function divideBy(BasicOperationsInterface $interface): BasicOperationsInterface
     {
@@ -168,13 +158,19 @@ class BigFraction implements BasicOperationsInterface
 
     /**
      * @throws ArgumentNotMatchPatternException
+     * @throws OperationException
      * @throws ParseNumberException
      */
     protected function reduce(): void
     {
         while (null !== ($divider = $this->findCommonFactor())) {
-            $this->numerator = BigInteger::fromString(\bcdiv($this->numerator->getNumber(), $divider));
-            $this->denominator = BigInteger::fromString(\bcdiv($this->denominator->getNumber(), $divider));
+            $numerator = \bcdiv($this->numerator->getNumber(), $divider);
+            $denominator = \bcdiv($this->denominator->getNumber(), $divider);
+            if (null === $numerator || null === $denominator) {
+                throw new OperationException('Divided by zero is undefined');
+            }
+            $this->numerator = BigInteger::fromString($numerator);
+            $this->denominator = BigInteger::fromString($denominator);
         }
     }
 

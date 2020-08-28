@@ -17,25 +17,21 @@ use MockingMagician\Mathoraptor\Exceptions\ParseNumberException;
 use MockingMagician\Mathoraptor\Number\BigFraction;
 use MockingMagician\Mathoraptor\Number\BigInteger;
 use MockingMagician\Mathoraptor\Number\BigNumber;
-use function mb_strlen;
-use function random_int;
 
 abstract class AbstractNumberProvider
 {
     /**
      * @throws Exception
-     *
-     * @return Generator
      */
     public function provideIntegerString(): Generator
     {
-        $papMaxIntLength = mb_strlen((string) PHP_INT_MAX);
+        $papMaxIntLength = \mb_strlen((string) PHP_INT_MAX);
 
         while (true) {
-            $sign = 0 === random_int(0, 1) ? '+' : '-';
+            $sign = 0 === \random_int(0, 1) ? '+' : '-';
             $integer = '';
-            while ($papMaxIntLength * 2 > mb_strlen($integer)) {
-                $integer .= (string) random_int(0, PHP_INT_MAX);
+            while ($papMaxIntLength * 2 > \mb_strlen($integer)) {
+                $integer .= (string) \random_int(0, PHP_INT_MAX);
             }
 
             yield $sign.$integer;
@@ -44,17 +40,15 @@ abstract class AbstractNumberProvider
 
     /**
      * @throws Exception
-     *
-     * @return Generator
      */
     public function provideNumberString(): Generator
     {
-        $papMaxIntLength = mb_strlen((string) PHP_INT_MAX);
+        $papMaxIntLength = \mb_strlen((string) PHP_INT_MAX);
 
         while (true) {
             $integer = '';
-            while ($papMaxIntLength * 2 > mb_strlen($integer)) {
-                $integer .= (string) random_int(0, PHP_INT_MAX);
+            while ($papMaxIntLength * 2 > \mb_strlen($integer)) {
+                $integer .= (string) \random_int(0, PHP_INT_MAX);
             }
 
             yield $this->provideIntegerString()->current().'.'.$integer;
@@ -65,8 +59,6 @@ abstract class AbstractNumberProvider
      * @throws ArgumentNotMatchPatternException
      * @throws ParseNumberException
      * @throws Exception
-     *
-     * @return BigNumber
      */
     public function provideBigNumber(): BigNumber
     {
@@ -77,8 +69,6 @@ abstract class AbstractNumberProvider
      * @throws ArgumentNotMatchPatternException
      * @throws ParseNumberException
      * @throws Exception
-     *
-     * @return BigInteger
      */
     public function provideBigInteger(): BigInteger
     {
@@ -89,8 +79,6 @@ abstract class AbstractNumberProvider
      * @throws ArgumentNotMatchPatternException
      * @throws ParseNumberException
      * @throws Exception
-     *
-     * @return BigFraction
      */
     public function provideBigFraction(): BigFraction
     {

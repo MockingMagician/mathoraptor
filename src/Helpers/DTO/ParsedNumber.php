@@ -18,10 +18,25 @@ use MockingMagician\Mathoraptor\Helpers\Constants;
  */
 final class ParsedNumber
 {
+    /**
+     * @var string
+     */
     private $sign;
+    /**
+     * @var string
+     */
     private $integerPart;
+    /**
+     * @var string
+     */
     private $decimalPart;
+    /**
+     * @var string
+     */
     private $exponentSign;
+    /**
+     * @var int
+     */
     private $exponent;
 
     /** @var null|string */
@@ -29,12 +44,6 @@ final class ParsedNumber
 
     /**
      * ParsedNumber constructor.
-     *
-     * @param string $sign
-     * @param string $integerPart
-     * @param string $decimalPart
-     * @param string $exponentSign
-     * @param int    $exponent
      *
      * @throws ArgumentNotMatchPatternException
      */

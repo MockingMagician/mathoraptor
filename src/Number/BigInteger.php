@@ -20,8 +20,6 @@ class BigInteger extends BigNumber
     /**
      * BigInteger constructor.
      *
-     * @param string $number
-     *
      * @throws ArgumentNotMatchPatternException
      * @throws ParseIntegerException
      * @throws ParseNumberException

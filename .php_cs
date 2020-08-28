@@ -12,10 +12,10 @@ $finder = PhpCsFixer\Finder::create()
 $config = PhpCsFixer\Config::create()
     ->setRiskyAllowed(true)
     ->setRules([
-        '@Symfony' => true,
         '@PhpCsFixer' => true,
+        'declare_strict_types' => true,
+        'phpdoc_to_param_type' => true,
         'php_unit_test_class_requires_covers' => false,
-        'self_accessor' => false,
         'php_unit_strict' => false,
         'yoda_style' => true,
         'native_function_invocation' => [

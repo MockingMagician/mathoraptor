@@ -24,8 +24,6 @@ class BigNumber implements BasicOperationsInterface
     /**
      * BigNumber constructor.
      *
-     * @param string $number
-     *
      * @throws ArgumentNotMatchPatternException
      * @throws ParseNumberException
      */
@@ -36,6 +34,8 @@ class BigNumber implements BasicOperationsInterface
 
     /**
      * @codeCoverageIgnore
+     *
+     * @return string[]
      */
     public function __debugInfo()
     {
@@ -53,8 +53,6 @@ class BigNumber implements BasicOperationsInterface
     }
 
     /**
-     * @param string $string
-     *
      * @throws ParseNumberException
      * @throws ArgumentNotMatchPatternException
      *
@@ -65,7 +63,7 @@ class BigNumber implements BasicOperationsInterface
         return new static($string);
     }
 
-    public function getIntegerPart()
+    public function getIntegerPart(): string
     {
         if (false === \strpos($this->number, '.')) {
             return $this->number;
@@ -74,7 +72,7 @@ class BigNumber implements BasicOperationsInterface
         return \explode('.', $this->number)[0];
     }
 
-    public function getDecimalPart()
+    public function getDecimalPart(): string
     {
         if (false === \strpos($this->number, '.')) {
             return '';
@@ -84,13 +82,9 @@ class BigNumber implements BasicOperationsInterface
     }
 
     /**
-     * @param BasicOperationsInterface $interface
-     *
      * @throws ArgumentNotMatchPatternException
      * @throws OperationException
      * @throws ParseNumberException
-     *
-     * @return BasicOperationsInterface
      */
     public function add(BasicOperationsInterface $interface): BasicOperationsInterface
     {
@@ -121,13 +115,9 @@ class BigNumber implements BasicOperationsInterface
     }
 
     /**
-     * @param BasicOperationsInterface $interface
-     *
      * @throws ArgumentNotMatchPatternException
      * @throws OperationException
      * @throws ParseNumberException
-     *
-     * @return BasicOperationsInterface
      */
     public function sub(BasicOperationsInterface $interface): BasicOperationsInterface
     {
@@ -158,13 +148,9 @@ class BigNumber implements BasicOperationsInterface
     }
 
     /**
-     * @param BasicOperationsInterface $interface
-     *
      * @throws ArgumentNotMatchPatternException
      * @throws OperationException
      * @throws ParseNumberException
-     *
-     * @return BasicOperationsInterface
      */
     public function multiplyBy(BasicOperationsInterface $interface): BasicOperationsInterface
     {
@@ -194,13 +180,9 @@ class BigNumber implements BasicOperationsInterface
     }
 
     /**
-     * @param BasicOperationsInterface $interface
-     *
      * @throws ArgumentNotMatchPatternException
      * @throws OperationException
      * @throws ParseNumberException
-     *
-     * @return BasicOperationsInterface
      */
     public function divideBy(BasicOperationsInterface $interface): BasicOperationsInterface
     {
@@ -226,8 +208,6 @@ class BigNumber implements BasicOperationsInterface
     /**
      * @throws ArgumentNotMatchPatternException
      * @throws ParseNumberException
-     *
-     * @return BigFraction
      */
     public function toBigFraction(): BigFraction
     {

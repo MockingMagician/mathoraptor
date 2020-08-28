@@ -23,8 +23,6 @@ final class Parser
     public $parsedNumber;
 
     /**
-     * @param string $number
-     *
      * @throws ParseNumberException
      * @throws ArgumentNotMatchPatternException
      */
@@ -51,12 +49,8 @@ final class Parser
     }
 
     /**
-     * @param string $integerOrFloatLike
-     *
      * @throws ArgumentNotMatchPatternException
      * @throws ParseNumberException
-     *
-     * @return string
      */
     public static function parseNumber(string $integerOrFloatLike): string
     {
