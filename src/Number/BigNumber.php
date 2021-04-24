@@ -95,18 +95,7 @@ class BigNumber implements BasicOperationsInterface
         }
 
         if ($interface instanceof BigFraction) {
-            $length = \mb_strlen($this->getDecimalPart());
-            $numerator = \bcmul($this->getNumber(), $interface->getDenominator()->getNumber(), $length);
-            $numerator = \bcadd($numerator, $interface->getNumerator()->getNumber(), $length);
-            $denominator = $interface->getDenominator()->getNumber();
-            $length = (string) \mb_strlen(BigNumber::fromString($numerator)->getDecimalPart());
-            if ($length > 0) {
-                $multiply = \bcpow('10', $length);
-                $numerator = \bcmul($numerator, $multiply);
-                $denominator = \bcmul($denominator, $multiply);
-            }
-
-            return new BigFraction(BigInteger::fromString($numerator), BigInteger::fromString($denominator));
+            return $this->applyBigFraction('add', $interface);
         }
 
         throw new OperationException(
@@ -128,23 +117,25 @@ class BigNumber implements BasicOperationsInterface
         }
 
         if ($interface instanceof BigFraction) {
-            $length = \mb_strlen($this->getDecimalPart());
-            $numerator = \bcmul($this->getNumber(), $interface->getDenominator()->getNumber(), $length);
-            $numerator = \bcsub($numerator, $interface->getNumerator()->getNumber(), $length);
-            $denominator = $interface->getDenominator()->getNumber();
-            $length = (string) \mb_strlen(BigNumber::fromString($numerator)->getDecimalPart());
-            if ($length > 0) {
-                $multiply = \bcpow('10', $length);
-                $numerator = \bcmul($numerator, $multiply);
-                $denominator = \bcmul($denominator, $multiply);
-            }
-
-            return new BigFraction(BigInteger::fromString($numerator), BigInteger::fromString($denominator));
+            return $this->applyBigFraction('sub', $interface);
         }
 
         throw new OperationException(
             \sprintf('Operation not implemented with object `%s`', \get_class($interface))
         );
+    }
+
+    public function ApplyFactory(BasicOperationsInterface $interface, $numerator)
+    {
+        $denominator = $interface->getDenominator()->getNumber();
+        $length = (string) \mb_strlen(BigNumber::fromString($numerator)->getDecimalPart());
+        if ($length > 0) {
+            $multiply = \bcpow('10', $length);
+            $numerator = \bcmul($numerator, $multiply);
+            $denominator = \bcmul($denominator, $multiply);
+        }
+
+        return new BigFraction(BigInteger::fromString($numerator), BigInteger::fromString($denominator));
     }
 
     /**
@@ -163,15 +154,8 @@ class BigNumber implements BasicOperationsInterface
         if ($interface instanceof BigFraction) {
             $length = \mb_strlen($this->getDecimalPart());
             $numerator = \bcmul($this->getNumber(), $interface->getNumerator()->getNumber(), $length);
-            $denominator = $interface->getDenominator()->getNumber();
-            $length = (string) \mb_strlen(BigNumber::fromString($numerator)->getDecimalPart());
-            if ($length > 0) {
-                $multiply = \bcpow('10', $length);
-                $numerator = \bcmul($numerator, $multiply);
-                $denominator = \bcmul($denominator, $multiply);
-            }
 
-            return new BigFraction(BigInteger::fromString($numerator), BigInteger::fromString($denominator));
+            return $this->ApplyFactory($interface, $numerator);
         }
 
         throw new OperationException(
@@ -223,5 +207,19 @@ class BigNumber implements BasicOperationsInterface
     public function getNumber(): string
     {
         return $this->number;
+    }
+
+    private function applyBigFraction($addOrSub, BasicOperationsInterface $interface)
+    {
+        $length = \mb_strlen($this->getDecimalPart());
+        $numerator = \bcmul($this->getNumber(), $interface->getDenominator()->getNumber(), $length);
+        if ('add' == $addOrSub) {
+            $numerator = \bcadd($numerator, $interface->getNumerator()->getNumber(), $length);
+        }
+        if ('sub' == $addOrSub) {
+            $numerator = \bcsub($numerator, $interface->getNumerator()->getNumber(), $length);
+        }
+
+        return $this->ApplyFactory($interface, $numerator);
     }
 }
